@@ -1,0 +1,13 @@
+dubbo:
+  registries:
+    nacos:
+      protocol: nacos
+      address: 127.0.0.1:8848 #需要修改
+  protocols:
+    triple:
+      name: tri
+      port: 20000
+  provider:
+    services:
+      GreeterServerImpl:
+        interface: "" # read from stub
