@@ -34,3 +34,20 @@ type FeedRequest struct {
 	LatestTime int64  `json:"latest_time,optional"`
 	Token      string `json:"token,optional"`
 }
+
+type PublishRequest struct {
+}
+
+type PublishResponse struct {
+	Response
+}
+
+type PublishListRequest struct {
+	Token  string `json:"token"`
+	UserId string `json:"user_id"`
+}
+
+type PublishListResponse struct {
+	Response
+	VideoList []Video `json:"video_list"`
+}

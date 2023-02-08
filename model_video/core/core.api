@@ -32,7 +32,30 @@ type FeedRequest {
 	Token      string `json:"token,optional"`
 }
 
+type PublishRequest {
+}
+
+type PublishResponse {
+	Response
+}
+
+type PublishListRequest {
+	Token  string `json:"token"`
+	UserId string `json:"user_id"`
+}
+
+type PublishListResponse {
+	Response
+	VideoList []Video `json:"video_list"`
+}
+
 service core-api {
 	@handler GetVideoList
-	get /Video/FeedVideo/GetVideoList
+	get /douyin/feed(FeedRequest) returns(FeedResponse)
+	
+	@handler PublishVideo
+	post /douyin/publish/action(PublishRequest) returns(PublishResponse)
+	
+	@handler PublishList
+	get /douyin/publish/list(PublishListRequest) returns(PublishResponse)
 }

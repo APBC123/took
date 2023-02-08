@@ -14,8 +14,18 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/Video/FeedVideo/GetVideoList",
+				Path:    "/douyin/feed",
 				Handler: GetVideoListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/douyin/publish/action",
+				Handler: PublishVideoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/douyin/publish/list",
+				Handler: PublishListHandler(serverCtx),
 			},
 		},
 	)

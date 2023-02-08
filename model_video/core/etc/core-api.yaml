@@ -2,3 +2,6 @@ Name: core-api
 Host: 0.0.0.0
 Port: 8888
 MaxBytes: 8388608
+
+Mysql:
+  DataSource: root:root@tcp(124.70.14.47)/zijie?charset=utf8mb4&parseTime=True&loc=Local
