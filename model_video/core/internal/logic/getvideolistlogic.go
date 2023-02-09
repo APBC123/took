@@ -3,8 +3,10 @@ package logic
 import (
 	"context"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"model_video/core/internal/svc"
+	"model_video/core/internal/types"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetVideoListLogic struct {
@@ -21,7 +23,7 @@ func NewGetVideoListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetV
 	}
 }
 
-func (l *GetVideoListLogic) GetVideoList() error {
+func (l *GetVideoListLogic) GetVideoList(req *types.FeedRequest) (resp *types.FeedResponse, err error) {
 
-	return nil
+	return
 }
