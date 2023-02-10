@@ -3,6 +3,7 @@ module model_video
 go 1.19
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/zeromicro/go-zero v1.4.4
 	xorm.io/xorm v1.3.2
