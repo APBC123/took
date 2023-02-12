@@ -63,7 +63,7 @@ func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *typ
 		return
 	}
 	//查询用户投稿的视频目录
-	err = l.svcCtx.Engine.Table("video").Where("author_id = ?", user.Id).Find(&vd)
+	err = l.svcCtx.Engine.Table("video").Where("author_id = ? AND removed = ? AND deleted = ?", user.Id, false, false).Find(&vd)
 	if err != nil {
 		resp.Response.StatusCode = -1
 		resp.Response.StatusMsg = err.Error()
