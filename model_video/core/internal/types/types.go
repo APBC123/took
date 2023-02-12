@@ -44,7 +44,7 @@ type PublishResponse struct {
 
 type PublishListRequest struct {
 	Token  string `json:"token"`
-	UserId string `json:"user_id"`
+	UserId int64  `json:"user_id"`
 }
 
 type PublishListResponse struct {

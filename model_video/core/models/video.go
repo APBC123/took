@@ -1,14 +1,12 @@
 package models
 
 type Video struct {
-	Id       int
-	AuthorId int
+	Id       int64
+	Author   int64
 	PlayUrl  string
 	CoverUrl string
 	Time     int
 	Title    string
-	Removed  bool
-	Deleted  bool
 }
 
 func (table Video) TableName() string {

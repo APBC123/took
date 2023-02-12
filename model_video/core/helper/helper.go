@@ -9,13 +9,13 @@ import (
 var JwtKey = "took"
 
 type UserClaim struct {
-	Id       int
+	Id       int64
 	Username string
 	Password string
 	jwt.StandardClaims
 }
 
-func GenerateToken(id int, username string, password string, second int) (string, error) {
+func GenerateToken(id int64, username string, password string, second int) (string, error) {
 	uc := UserClaim{
 		Id:       id,
 		Username: username,

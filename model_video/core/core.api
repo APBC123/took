@@ -41,7 +41,7 @@ type PublishResponse {
 
 type PublishListRequest {
 	Token  string `json:"token"`
-	UserId string `json:"user_id"`
+	UserId int64  `json:"user_id"`
 }
 
 type PublishListResponse {
@@ -57,5 +57,5 @@ service core-api {
 	post /douyin/publish/action(PublishRequest) returns(PublishResponse)
 	
 	@handler PublishList
-	get /douyin/publish/list(PublishListRequest) returns(PublishResponse)
+	get /douyin/publish/list(PublishListRequest) returns(PublishListResponse)
 }
