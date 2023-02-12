@@ -15,7 +15,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodGet,
 				Path:    "/douyin/feed",
-				Handler: GetVideoListHandler(serverCtx),
+				Handler: GetVideoHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,

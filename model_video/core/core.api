@@ -50,7 +50,7 @@ type PublishListResponse {
 }
 
 service core-api {
-	@handler GetVideoList
+	@handler GetVideo
 	get /douyin/feed(FeedRequest) returns(FeedResponse)
 	
 	@handler PublishVideo
