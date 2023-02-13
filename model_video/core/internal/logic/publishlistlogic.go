@@ -26,7 +26,7 @@ func NewPublishListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Publi
 
 func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *types.PublishListResponse, err error) {
 	//验证Token
-
+	//
 	uc, err := helper.AnalyzeToken(req.Token)
 	if err != nil {
 		return nil, err
