@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"model_video/core/helper"
 	"model_video/core/internal/svc"
 	"model_video/core/internal/types"
 	"model_video/core/models"
@@ -25,17 +26,17 @@ func NewPublishListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Publi
 
 func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *types.PublishListResponse, err error) {
 	//验证Token
-	/*
-		uc, err := helper.AnalyzeToken(req.Token)
-		if err != nil {
-			return nil, err
-		}
-		if uc.Id != req.UserId {
-			resp.Response.StatusCode = -1
-			resp.Response.StatusMsg = "UserId doesn't match Token"
-			return
-		}
-	*/
+
+	uc, err := helper.AnalyzeToken(req.Token)
+	if err != nil {
+		return nil, err
+	}
+	if uc.Id != req.UserId {
+		resp.Response.StatusCode = -1
+		resp.Response.StatusMsg = "UserId doesn't match Token"
+		return
+	}
+
 	resp = new(types.PublishListResponse)
 	ur := new(models.User)
 	//获取用户信息
