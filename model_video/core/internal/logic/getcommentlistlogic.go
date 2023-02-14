@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"model_video/core/helper"
 	"model_video/core/models"
 
 	"model_video/core/internal/svc"
@@ -26,23 +27,21 @@ func NewGetCommentListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 
 func (l *GetCommentListLogic) GetCommentList(req *types.CommentListRequest) (resp *types.CommentListResponse, err error) {
 	//验证Token
-	/*
-			uc, err := helper.AnalyzeToken(req.Token)
-			if err != nil {
-				return nil, err
-			}
-			has, err := l.svcCtx.Engine.Where("id = ? AND username = ? AND password = ?", uc.Id, uc.Username, uc.Password).Get(new(models.User))
-			if err != nil {
-				return nil, err
-			}
-			if !has {
-				resp.StatusCode = -1
-				resp.StatusMsg = "User doesn't match Token"
-		        resp.CommentList = make([]types.Comment,0)
-				return
-			}
-			uc = nil
-	*/
+	uc, err := helper.AnalyzeToken(req.Token)
+	if err != nil {
+		return nil, err
+	}
+	has, err := l.svcCtx.Engine.Where("id = ? AND username = ? AND password = ?", uc.Id, uc.Username, uc.Password).Get(new(models.User))
+	if err != nil {
+		return nil, err
+	}
+	if !has {
+		resp.StatusCode = -1
+		resp.StatusMsg = "User doesn't match Token"
+		resp.CommentList = make([]types.Comment, 0)
+		return
+	}
+	uc = nil
 	resp = new(types.CommentListResponse)
 	//查询评论信息
 	ct := make([]*models.Comment, 0)
@@ -53,7 +52,7 @@ func (l *GetCommentListLogic) GetCommentList(req *types.CommentListRequest) (res
 
 	//查询视频作者id
 	vd := new(models.Video)
-	has, err := l.svcCtx.Engine.Where("id = ? AND deleted = ? AND removed = ?", req.VideoId, false, false).Get(vd)
+	has, err = l.svcCtx.Engine.Where("id = ? AND deleted = ? AND removed = ?", req.VideoId, false, false).Get(vd)
 	if err != nil {
 		return nil, err
 	}
