@@ -33,10 +33,10 @@ func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *typ
 	}
 	if uc.Id != req.UserId {
 		resp.Response.StatusCode = -1
-		resp.Response.StatusMsg = "UserId doesn't match Token"
+		resp.Response.StatusMsg = "User doesn't match Token"
+		resp.VideoList = make([]types.Video, 0)
 		return
 	}
-
 	resp = new(types.PublishListResponse)
 	ur := new(models.User)
 	//获取用户信息
@@ -44,9 +44,17 @@ func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *typ
 	if err != nil {
 		return nil, err
 	}
+	//验证Token
+	if ur.Password != uc.Password || ur.Username != uc.Username {
+		resp.Response.StatusCode = -1
+		resp.Response.StatusMsg = "User doesn't match Token"
+		resp.VideoList = make([]types.Video, 0)
+		return
+	}
 	if !has {
 		resp.Response.StatusCode = -1
 		resp.Response.StatusMsg = "the user doesn't exist"
+		resp.VideoList = make([]types.Video, 0)
 		return
 	}
 	user := new(types.User)
@@ -55,9 +63,10 @@ func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *typ
 	user.FollowerCount = ur.FollowerCount
 	user.FollowCount = ur.FollowCount
 	user.IsFollow = false
+	ur = nil
 	//查询用户投稿的视频目录
 	vd := make([]*models.Video, 0)
-	err = l.svcCtx.Engine.Where("author_id = ? AND removed = ? AND deleted = ?", ur.Id, false, false).Find(&vd)
+	err = l.svcCtx.Engine.Where("author_id = ? AND removed = ? AND deleted = ?", user.Id, false, false).Find(&vd)
 	if err != nil {
 		return nil, err
 	}

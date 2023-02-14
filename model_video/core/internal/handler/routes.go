@@ -27,6 +27,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/douyin/publish/list",
 				Handler: PublishListHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/douyin/comment/list",
+				Handler: GetCommentListHandler(serverCtx),
+			},
 		},
 	)
 }

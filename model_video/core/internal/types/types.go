@@ -52,3 +52,21 @@ type PublishListResponse struct {
 	Response
 	VideoList []Video `json:"video_list"`
 }
+
+type CommentListRequest struct {
+	Token   string `json:"token,omitempty"`
+	VideoId int64  `json:"video_id,omitempty"`
+}
+
+type Comment struct {
+	Id         int64  `json:"id"`
+	User       User   `json:"user"`
+	Content    string `json:"content"`
+	CreateDate string `json:"create_date"`
+}
+
+type CommentListResponse struct {
+	StatusCode  int32     `json:"status_code"`
+	StatusMsg   string    `json:"status_msg,optional"`
+	CommentList []Comment `json:"comment_list,omitempty"`
+}
