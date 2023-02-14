@@ -27,6 +27,7 @@ func NewGetCommentListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 
 func (l *GetCommentListLogic) GetCommentList(req *types.CommentListRequest) (resp *types.CommentListResponse, err error) {
 	//验证Token
+	resp = new(types.CommentListResponse)
 	uc, err := helper.AnalyzeToken(req.Token)
 	if err != nil {
 		return nil, err
@@ -38,11 +39,9 @@ func (l *GetCommentListLogic) GetCommentList(req *types.CommentListRequest) (res
 	if !has {
 		resp.StatusCode = -1
 		resp.StatusMsg = "User doesn't match Token"
-		resp.CommentList = make([]types.Comment, 0)
 		return
 	}
 	uc = nil
-	resp = new(types.CommentListResponse)
 	//查询评论信息
 	ct := make([]*models.Comment, 0)
 	err = l.svcCtx.Engine.Where("video_id  = ? AND deleted = ? AND removed = ?", req.VideoId, false, false).Desc("create_time").Find(&ct)
@@ -59,7 +58,6 @@ func (l *GetCommentListLogic) GetCommentList(req *types.CommentListRequest) (res
 	if !has {
 		resp.StatusCode = -1
 		resp.StatusMsg = "The author doesn't exist"
-		resp.CommentList = make([]types.Comment, 0)
 		return
 	}
 	authorId := vd.AuthorId
