@@ -27,6 +27,7 @@ func NewPublishListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Publi
 func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *types.PublishListResponse, err error) {
 	//验证Token
 	//
+	resp = new(types.PublishListResponse)
 	uc, err := helper.AnalyzeToken(req.Token)
 	if err != nil {
 		return nil, err
@@ -34,10 +35,8 @@ func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *typ
 	if uc.Id != req.UserId {
 		resp.Response.StatusCode = -1
 		resp.Response.StatusMsg = "User doesn't match Token"
-		resp.VideoList = make([]types.Video, 0)
 		return
 	}
-	resp = new(types.PublishListResponse)
 	ur := new(models.User)
 	//获取用户信息
 	has, err := l.svcCtx.Engine.Where("id = ? AND deleted = ? AND enable = ?", req.UserId, false, true).Get(ur)
@@ -48,13 +47,11 @@ func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *typ
 	if ur.Password != uc.Password || ur.Username != uc.Username {
 		resp.Response.StatusCode = -1
 		resp.Response.StatusMsg = "User doesn't match Token"
-		resp.VideoList = make([]types.Video, 0)
 		return
 	}
 	if !has {
 		resp.Response.StatusCode = -1
 		resp.Response.StatusMsg = "the user doesn't exist"
-		resp.VideoList = make([]types.Video, 0)
 		return
 	}
 	user := new(types.User)
