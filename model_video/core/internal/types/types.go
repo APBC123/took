@@ -37,6 +37,10 @@ type FeedRequest struct {
 }
 
 type PublishRequest struct {
+	Token    string `json:"token,optional"`
+	Title    string `json:"title,optional"`
+	PlayUrl  string `json:"play_url,optional"`
+	CoverUrl string `json:"cover_url,optional"`
 }
 
 type PublishResponse struct {
