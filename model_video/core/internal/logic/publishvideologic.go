@@ -31,13 +31,6 @@ func (l *PublishVideoLogic) PublishVideo(req *types.PublishRequest) (resp *types
 	if err != nil {
 		return nil, err
 	}
-	//验证Token
-	has, err := l.svcCtx.Engine.Where("id = ? AND username = ? AND password = ?", uc.Id, uc.Username, uc.Password).Get(new(models.User))
-	if !has {
-		resp.StatusCode = -1
-		resp.StatusMsg = "User doesn't match Token"
-		return
-	}
 	//插入上传记录，上传已在handler层中完成
 	vd := &models.Video{
 		AuthorId:      uc.Id,

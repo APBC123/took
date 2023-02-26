@@ -28,20 +28,10 @@ func NewGetCommentListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 func (l *GetCommentListLogic) GetCommentList(req *types.CommentListRequest) (resp *types.CommentListResponse, err error) {
 	//验证Token
 	resp = new(types.CommentListResponse)
-	uc, err := helper.AnalyzeToken(req.Token)
+	_, err = helper.AnalyzeToken(req.Token)
 	if err != nil {
 		return nil, err
 	}
-	has, err := l.svcCtx.Engine.Where("id = ? AND username = ? AND password = ?", uc.Id, uc.Username, uc.Password).Get(new(models.User))
-	if err != nil {
-		return nil, err
-	}
-	if !has {
-		resp.StatusCode = -1
-		resp.StatusMsg = "User doesn't match Token"
-		return
-	}
-	uc = nil
 	//查询评论信息
 	ct := make([]*models.Comment, 0)
 	err = l.svcCtx.Engine.Where("video_id  = ? AND deleted = ? AND removed = ?", req.VideoId, false, false).Desc("create_time").Find(&ct)
@@ -51,7 +41,7 @@ func (l *GetCommentListLogic) GetCommentList(req *types.CommentListRequest) (res
 
 	//查询视频作者id
 	vd := new(models.Video)
-	has, err = l.svcCtx.Engine.Where("id = ? AND deleted = ? AND removed = ?", req.VideoId, false, false).Get(vd)
+	has, err := l.svcCtx.Engine.Where("id = ? AND deleted = ? AND removed = ?", req.VideoId, false, false).Get(vd)
 	if err != nil {
 		return nil, err
 	}

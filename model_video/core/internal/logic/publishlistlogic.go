@@ -43,17 +43,6 @@ func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *typ
 	if err != nil {
 		return nil, err
 	}
-	//验证Token
-	if ur.Password != uc.Password || ur.Username != uc.Username {
-		resp.Response.StatusCode = -1
-		resp.Response.StatusMsg = "User doesn't match Token"
-		return
-	}
-	if !has {
-		resp.Response.StatusCode = -1
-		resp.Response.StatusMsg = "the user doesn't exist"
-		return
-	}
 	user := new(types.User)
 	user.Username = ur.Username
 	user.Id = ur.Id
