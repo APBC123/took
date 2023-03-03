@@ -1,0 +1,104 @@
+syntax = "v1"
+
+// 用户注册
+type (
+	RegisterReq {
+		Username	string	`json:"username"`
+		Password	string	`json:"password"`
+	}
+
+	RegisterResp {
+		
+	}
+)
+
+// 用户登录
+type (
+	LoginReq {
+
+	}
+
+	LoginResp {
+		
+	}
+)
+
+// 获取用户信息
+type (
+	UserInfoReq {
+
+	}
+
+	UserInfoResp {
+
+	}
+)
+
+// 关系操作
+type (
+	FollowReq {
+
+	}
+
+	FollowResp {
+		
+	}
+)
+
+// 获取关注列表
+type (
+	FollowListReq {
+
+	}
+
+	FollowListResp {
+
+	}
+)
+
+// 获取粉丝列表
+type (
+	FollowerListReq {
+
+	}
+
+	FollowerListResp {
+
+	}
+)
+
+// 获取好友列表
+type (
+	FriendListReq {
+
+	}
+
+	FriendListResp {
+
+	}
+)
+
+
+service user-api {
+	@handler Register
+	post /douyin/user/register(RegisterReq) returns(RegisterResp)
+
+	@handler Login
+	post /douyin/user/login(LoginReq) returns(LoginResp)
+
+	@handler GetUserInfo
+	get /douyin/user(UserInfoReq) returns(UserInfoResp)
+
+	@handler Follow
+	post /douyin/relation/action(RelationReq) returns(RelationResp)
+
+	@handler GetFollowList
+	get /douyin/relation/follow/list(FollowListReq) returns(FollowListResp)
+
+	@handler GetFollowerList
+	get /douyin/realtion/follower/list(FollowerListReq) returns(FollowerListResp)
+
+	@handler GetFriendList
+	get /douyin/relation/friend/list(FriendListReq) returns(FriendListResp)
+	
+}
