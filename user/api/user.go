@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 
-	"model_user/api/internal/config"
-	"model_user/api/internal/handler"
-	"model_user/api/internal/svc"
+	"took/user/api/internal/config"
+	"took/user/api/internal/handler"
+	"took/user/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"

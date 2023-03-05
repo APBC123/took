@@ -1,8 +1,8 @@
 package svc
 
 import (
-	"model_user/api/internal/config"
-	"model_user/model"
+	"took/user/api/internal/config"
+	"took/user/model"
 
 	"xorm.io/xorm"
 )

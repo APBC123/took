@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"model_user/api/internal/logic"
-	"model_user/api/internal/svc"
-	"model_user/api/internal/types"
+	"took/user/api/internal/logic"
+	"took/user/api/internal/svc"
+	"took/user/api/internal/types"
 )
 
 func GetFriendListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

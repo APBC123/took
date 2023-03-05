@@ -3,9 +3,9 @@ package logic
 import (
 	"context"
 
-	"model_user/api/internal/svc"
-	"model_user/api/internal/types"
-	"model_user/model"
+	"took/user/api/internal/svc"
+	"took/user/api/internal/types"
+	"took/user/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
