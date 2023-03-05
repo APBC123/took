@@ -32,7 +32,7 @@
 
   返回登录用户的粉丝列表
 
-- /douyin/relation/friend/list/ - 用户好友列且
+- /douyin/relation/friend/list/ - 用户好友列表
 
   返回与登录用户互关的用户列表
 

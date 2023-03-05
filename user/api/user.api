@@ -1,104 +1,138 @@
 syntax = "v1"
 
+type User {
+	Id              int64  `json:"id"`
+	Username        string `json:"name"`
+	FollowCount     int64  `json:"follow_count"`
+	FollowerCount   int64  `json:"follower_count"`
+	IsFollow        bool   `json:"is_follow"`
+	Avatar          string `json:"avatar"`
+	BackgroundImage string `json:"background_image"`
+	Signature       string `json:"signature"`
+	TotalFavorited  string `json:"total_favorited"`
+	WorkCount       int64  `json:"work_count"`
+	FavoriteCount   int64  `json:"favorite_count"`
+}
+
 // 用户注册
 type (
 	RegisterReq {
-		Username	string	`json:"username"`
-		Password	string	`json:"password"`
+		Username string `form:"username"`
+		Password string `form:"password"`
 	}
 
 	RegisterResp {
-		
+		StatusCode int64  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+		UserId     int64  `json:"user_id"`
+		Token      string `json:"token"`
 	}
 )
 
 // 用户登录
 type (
 	LoginReq {
-
+		Username string `form:"username"`
+		Password string `form:"password"`
 	}
 
 	LoginResp {
-		
+		StatusCode int64  `json:"status_code"`
+		StatusMsg  string `json:"status_msg,omitempty"`
+		UserId     int64  `json:"user_id,omitempty"`
+		Token      string `json:"token,omitempty"`
 	}
 )
 
 // 获取用户信息
 type (
 	UserInfoReq {
-
+		UserId int64  `form:"user_id"`
+		Token  string `form:"token"`
 	}
 
 	UserInfoResp {
-
+		StatusCode int64  `json:"status_code"`
+		StatusMsg  string `json:"status_msg,omitempty"`
+		User       User   `json:"user,omitempty"`
 	}
 )
 
-// 关系操作
+// 关注操作
 type (
 	FollowReq {
-
+		Token      string `form:"token"`
+		ToUserId   string `form:"to_user_id"`
+		ActionType string `form:"action_type"`
 	}
 
 	FollowResp {
-		
+		StatusCode int64  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
 	}
 )
 
 // 获取关注列表
 type (
 	FollowListReq {
-
+		UserId string `form:"user_id"`
+		Token  string `form:"token"`
 	}
 
 	FollowListResp {
-
+		StatusCode string `json:"status_code"`
+		StatusMsg  string `json:"status_msg,omitempty"`
+		UserList   []User `json:"user_list,omitempty"`
 	}
 )
 
 // 获取粉丝列表
 type (
 	FollowerListReq {
-
+		UserId string `form:"user_id"`
+		Token  string `form:"token"`
 	}
 
 	FollowerListResp {
-
+		StatusCode string `json:"status_code"`
+		StatusMsg  string `json:"status_msg,omitempty"`
+		UserList   []User `json:"user_list,omitempty"`
 	}
 )
 
 // 获取好友列表
 type (
 	FriendListReq {
-
+		UserId string `form:"user_id"`
+		Token  string `form:"token"`
 	}
 
 	FriendListResp {
-
+		StatusCode string `json:"status_code"`
+		StatusMsg  string `json:"status_msg,omitempty"`
+		UserList   []User `json:"user_list,omitempty"`
 	}
 )
-
 
 service user-api {
 	@handler Register
 	post /douyin/user/register(RegisterReq) returns(RegisterResp)
-
+	
 	@handler Login
 	post /douyin/user/login(LoginReq) returns(LoginResp)
-
+	
 	@handler GetUserInfo
 	get /douyin/user(UserInfoReq) returns(UserInfoResp)
-
+	
 	@handler Follow
-	post /douyin/relation/action(RelationReq) returns(RelationResp)
-
+	post /douyin/relation/action(FollowReq) returns(FollowResp)
+	
 	@handler GetFollowList
 	get /douyin/relation/follow/list(FollowListReq) returns(FollowListResp)
-
+	
 	@handler GetFollowerList
 	get /douyin/realtion/follower/list(FollowerListReq) returns(FollowerListResp)
-
+	
 	@handler GetFriendList
 	get /douyin/relation/friend/list(FriendListReq) returns(FriendListResp)
-	
 }
