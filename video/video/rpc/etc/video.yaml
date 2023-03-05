@@ -1,0 +1,9 @@
+Name: video.rpc
+ListenOn: 0.0.0.0:8080
+Timeout: 5000
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: video.rpc
+Mysql:
+  DataSource: root:root123@tcp(124.70.14.47)/zijie?charset=utf8mb4&parseTime=True&loc=Local

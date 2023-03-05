@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package video;
+
+option go_package = "./video";
+
+message Response {
+  int32 StatusCode = 1;
+  string StatusMsg = 2;
+}
+
+message Video {
+  int64 Id = 1;
+  User Author = 2;
+  string PlayUrl = 3;
+  string CoverUrl = 4;
+  int64 FavoriteCount = 5;
+  int64 CommentCount = 6;
+  string Title = 7;
+  bool IsFavorite = 8;
+}
+
+message User {
+  int64 Id = 1;
+  string Username = 2;
+  int64 FollowCount = 3;
+  int64 FollowerCount = 4;
+  bool IsFollow = 5;
+  string Avatar = 6;
+  string BackgroundImage = 7;
+  string Signature = 8;
+  int64 TotalFavorited = 9;
+  int64 WorkCount = 10;
+  int64 FavoriteCount = 11;
+}
+
+message FeedResponse {
+  int32 StatusCode = 1;
+  string StatusMsg = 2;
+  repeated Video VideoList = 3;
+  int64 NextTime = 4;
+}
+
+message FeedRequest {
+  int64 LatestTime = 1;
+  string Token = 2;
+}
+
+message PublishListRequest {
+  string Token = 1;
+  int64 UserId = 2;
+}
+
+message PublishListResponse {
+  int32 StatusCode = 1;
+  string StatusMsg = 2;
+  repeated Video VideoList = 3;
+}
+
+message CommentListRequest {
+  string Token = 1;
+  int64 VideoId = 2;
+}
+
+message Comment {
+  int64 Id = 1;
+  User User = 2;
+  string Content = 3;
+  string CreateDate = 4;
+}
+
+message CommentListResponse {
+  int32 StatusCode = 1;
+  string StatusMsg = 2;
+  repeated Comment CommentList = 3;
+}
+
+service VideoService {
+  rpc GetVideo(FeedRequest) returns(FeedResponse);
+
+  rpc PublishList(PublishListRequest) returns(PublishListResponse);
+
+  rpc GetCommentList(CommentListRequest) returns(CommentListResponse);
+}
