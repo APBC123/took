@@ -1,0 +1,10 @@
+Name: user-api
+Host: 0.0.0.0
+Port: 8088
+Mysql:
+  DataSource: root:jkl;@tcp(127.0.0.1)/took?charset=utf8mb4&parseTime=True&loc=Local
+CacheRedis:
+  - Host: 127.0.0.1:6379
+Auth:
+  AccessSecret: 39d63c69-4a4c-4763-92ba-73bbb80f22fe
+  AccessExpire: 3600
