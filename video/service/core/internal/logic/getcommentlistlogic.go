@@ -32,7 +32,7 @@ func (l *GetCommentListLogic) GetCommentList(req *types.CommentListRequest) (res
 		return nil, err
 	}
 	resp = new(types.CommentListResponse)
-	//未完
+
 	list := commentList.CommentList
 	resp.CommentList = make([]types.Comment, len(list))
 	for i := range resp.CommentList {

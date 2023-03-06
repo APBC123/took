@@ -43,10 +43,10 @@ type FeedRequest struct {
 }
 
 type PublishRequest struct {
-	Token    string `json:"token,optional"`
-	Title    string `json:"title,optional"`
-	PlayUrl  string `json:"play_url,optional"`
-	CoverUrl string `json:"cover_url,optional"`
+	Token    string `form:"token,optional"`
+	Title    string `form:"title,optional"`
+	PlayUrl  string `form:"play_url,optional"`
+	CoverUrl string `form:"cover_url,optional"`
 }
 
 type PublishResponse struct {
@@ -54,8 +54,8 @@ type PublishResponse struct {
 }
 
 type PublishListRequest struct {
-	Token  string `json:"token"`
-	UserId int64  `json:"user_id"`
+	Token  string `form:"token,optional"`
+	UserId int64  `form:"user_id"`
 }
 
 type PublishListResponse struct {

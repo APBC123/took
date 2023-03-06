@@ -96,6 +96,8 @@ func PublishVideoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		req.PlayUrl = videoPath
 		req.CoverUrl = coverPath
 		//helper.GetVideoShot
+		os.Remove(fc.Name())
+		os.Remove(fv.Name())
 
 		l := logic.NewPublishVideoLogic(r.Context(), svcCtx)
 		resp, err := l.PublishVideo(&req)

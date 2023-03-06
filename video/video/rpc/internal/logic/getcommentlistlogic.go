@@ -27,15 +27,16 @@ func NewGetCommentListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 func (l *GetCommentListLogic) GetCommentList(in *video.CommentListRequest) (*video.CommentListResponse, error) {
 	resp := new(video.CommentListResponse)
 	//验证Token
-
-	_, err := helper.AnalyzeToken(in.Token)
-	if err != nil {
-		return nil, err
+	if in.Token != "" {
+		_, err := helper.AnalyzeToken(in.Token)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	//查询评论信息
 	ct := make([]*models2.Comment, 0)
-	err = l.svcCtx.Engine.Where("video_id  = ? AND deleted = ? AND removed = ?", in.VideoId, false, false).Desc("create_time").Find(&ct)
+	err := l.svcCtx.Engine.Where("video_id  = ? AND deleted = ? AND removed = ?", in.VideoId, false, false).Desc("create_time").Find(&ct)
 	if err != nil {
 		return nil, err
 	}

@@ -26,10 +26,12 @@ func NewPublishVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Publ
 
 func (l *PublishVideoLogic) PublishVideo(req *types.PublishRequest) (resp *types.PublishResponse, err error) {
 	resp = new(types.PublishResponse)
+
 	uc, err := helper.AnalyzeToken(req.Token)
 	if err != nil {
 		return nil, err
 	}
+
 	//插入上传记录，上传已在handler层中完成
 	vd := &models.Video{
 		AuthorId:      uc.Id,

@@ -29,14 +29,16 @@ func (l *PublishListLogic) PublishList(in *video.PublishListRequest) (*video.Pub
 	//
 	resp := new(video.PublishListResponse)
 
-	uc, err := helper.AnalyzeToken(in.Token)
-	if err != nil {
-		return nil, err
-	}
-	if uc.Id != in.UserId {
-		resp.StatusCode = -1
-		resp.StatusMsg = "User doesn't match Token"
-		return resp, nil
+	if in.Token != "" {
+		uc, err := helper.AnalyzeToken(in.Token)
+		if err != nil {
+			return nil, err
+		}
+		if uc.Id != in.UserId {
+			resp.StatusCode = -1
+			resp.StatusMsg = "User doesn't match Token"
+			return resp, nil
+		}
 	}
 
 	ur := new(models2.User)
