@@ -2,12 +2,11 @@ package logic
 
 import (
 	"context"
+	"github.com/zeromicro/go-zero/core/logx"
+	"took/server/service/core/internal/svc"
+	"took/server/service/core/internal/types"
 	"took/video/helper"
 	"took/video/models"
-	"took/video/service/core/internal/svc"
-	"took/video/service/core/internal/types"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type PublishVideoLogic struct {

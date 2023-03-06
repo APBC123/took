@@ -3,12 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"took/video/service/core/internal/config"
-	"took/video/service/core/internal/handler"
-	"took/video/service/core/internal/svc"
-
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
+	"took/server/service/core/internal/config"
+	"took/server/service/core/internal/handler"
+	"took/server/service/core/internal/svc"
 )
 
 var configFile = flag.String("f", "etc/core-api.yaml", "the config file")

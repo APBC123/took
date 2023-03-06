@@ -2,8 +2,8 @@ package svc
 
 import (
 	"github.com/zeromicro/go-zero/zrpc"
+	"took/server/service/core/internal/config"
 	"took/video/models"
-	"took/video/service/core/internal/config"
 	"took/video/video/rpc/videoservice"
 	"xorm.io/xorm"
 )

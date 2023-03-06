@@ -1,12 +1,11 @@
 package handler
 
 import (
-	"net/http"
-	"took/video/service/core/internal/logic"
-	"took/video/service/core/internal/svc"
-	"took/video/service/core/internal/types"
-
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"net/http"
+	"took/server/service/core/internal/logic"
+	"took/server/service/core/internal/svc"
+	"took/server/service/core/internal/types"
 )
 
 func PublishListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

@@ -3,15 +3,14 @@ package handler
 import (
 	"bufio"
 	"encoding/json"
+	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
 	"os"
 	"path"
+	"took/server/service/core/internal/logic"
+	"took/server/service/core/internal/svc"
+	"took/server/service/core/internal/types"
 	"took/video/helper"
-	"took/video/service/core/internal/logic"
-	"took/video/service/core/internal/svc"
-	"took/video/service/core/internal/types"
-
-	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func PublishVideoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

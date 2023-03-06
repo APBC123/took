@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
-	"took/video/service/core/internal/svc"
-	"took/video/service/core/internal/types"
+	"took/server/service/core/internal/svc"
+	"took/server/service/core/internal/types"
 	"took/video/video/rpc/types/video"
 
 	"github.com/zeromicro/go-zero/core/logx"
