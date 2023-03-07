@@ -5,6 +5,7 @@ package server
 
 import (
 	"context"
+
 	"took/video/video/rpc/internal/logic"
 	"took/video/video/rpc/internal/svc"
 	"took/video/video/rpc/types/video"
@@ -34,4 +35,9 @@ func (s *VideoServiceServer) PublishList(ctx context.Context, in *video.PublishL
 func (s *VideoServiceServer) GetCommentList(ctx context.Context, in *video.CommentListRequest) (*video.CommentListResponse, error) {
 	l := logic.NewGetCommentListLogic(ctx, s.svcCtx)
 	return l.GetCommentList(in)
+}
+
+func (s *VideoServiceServer) CommentAction(ctx context.Context, in *video.CommentActionRequest) (*video.CommentActionResponse, error) {
+	l := logic.NewCommentActionLogic(ctx, s.svcCtx)
+	return l.CommentAction(in)
 }

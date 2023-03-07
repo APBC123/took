@@ -3,6 +3,7 @@ package handler
 
 import (
 	"net/http"
+
 	"took/server/service/core/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -30,6 +31,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/douyin/comment/list",
 				Handler: GetCommentListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/douyin/comment/action",
+				Handler: CommentActionHandler(serverCtx),
 			},
 		},
 	)

@@ -5,6 +5,7 @@ package videoservice
 
 import (
 	"context"
+
 	"took/video/video/rpc/types/video"
 
 	"github.com/zeromicro/go-zero/zrpc"
@@ -12,21 +13,24 @@ import (
 )
 
 type (
-	Comment             = video.Comment
-	CommentListRequest  = video.CommentListRequest
-	CommentListResponse = video.CommentListResponse
-	FeedRequest         = video.FeedRequest
-	FeedResponse        = video.FeedResponse
-	PublishListRequest  = video.PublishListRequest
-	PublishListResponse = video.PublishListResponse
-	Response            = video.Response
-	User                = video.User
-	Video               = video.Video
+	Comment               = video.Comment
+	CommentActionRequest  = video.CommentActionRequest
+	CommentActionResponse = video.CommentActionResponse
+	CommentListRequest    = video.CommentListRequest
+	CommentListResponse   = video.CommentListResponse
+	FeedRequest           = video.FeedRequest
+	FeedResponse          = video.FeedResponse
+	PublishListRequest    = video.PublishListRequest
+	PublishListResponse   = video.PublishListResponse
+	Response              = video.Response
+	User                  = video.User
+	Video                 = video.Video
 
 	VideoService interface {
 		GetVideo(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (*FeedResponse, error)
 		PublishList(ctx context.Context, in *PublishListRequest, opts ...grpc.CallOption) (*PublishListResponse, error)
 		GetCommentList(ctx context.Context, in *CommentListRequest, opts ...grpc.CallOption) (*CommentListResponse, error)
+		CommentAction(ctx context.Context, in *CommentActionRequest, opts ...grpc.CallOption) (*CommentActionResponse, error)
 	}
 
 	defaultVideoService struct {
@@ -53,4 +57,9 @@ func (m *defaultVideoService) PublishList(ctx context.Context, in *PublishListRe
 func (m *defaultVideoService) GetCommentList(ctx context.Context, in *CommentListRequest, opts ...grpc.CallOption) (*CommentListResponse, error) {
 	client := video.NewVideoServiceClient(m.cli.Conn())
 	return client.GetCommentList(ctx, in, opts...)
+}
+
+func (m *defaultVideoService) CommentAction(ctx context.Context, in *CommentActionRequest, opts ...grpc.CallOption) (*CommentActionResponse, error) {
+	client := video.NewVideoServiceClient(m.cli.Conn())
+	return client.CommentAction(ctx, in, opts...)
 }

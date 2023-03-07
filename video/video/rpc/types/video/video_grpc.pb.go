@@ -20,6 +20,7 @@ type VideoServiceClient interface {
 	GetVideo(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (*FeedResponse, error)
 	PublishList(ctx context.Context, in *PublishListRequest, opts ...grpc.CallOption) (*PublishListResponse, error)
 	GetCommentList(ctx context.Context, in *CommentListRequest, opts ...grpc.CallOption) (*CommentListResponse, error)
+	CommentAction(ctx context.Context, in *CommentActionRequest, opts ...grpc.CallOption) (*CommentActionResponse, error)
 }
 
 type videoServiceClient struct {
@@ -57,6 +58,15 @@ func (c *videoServiceClient) GetCommentList(ctx context.Context, in *CommentList
 	return out, nil
 }
 
+func (c *videoServiceClient) CommentAction(ctx context.Context, in *CommentActionRequest, opts ...grpc.CallOption) (*CommentActionResponse, error) {
+	out := new(CommentActionResponse)
+	err := c.cc.Invoke(ctx, "/video.VideoService/CommentAction", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // VideoServiceServer is the server API for VideoService service.
 // All implementations must embed UnimplementedVideoServiceServer
 // for forward compatibility
@@ -64,6 +74,7 @@ type VideoServiceServer interface {
 	GetVideo(context.Context, *FeedRequest) (*FeedResponse, error)
 	PublishList(context.Context, *PublishListRequest) (*PublishListResponse, error)
 	GetCommentList(context.Context, *CommentListRequest) (*CommentListResponse, error)
+	CommentAction(context.Context, *CommentActionRequest) (*CommentActionResponse, error)
 	mustEmbedUnimplementedVideoServiceServer()
 }
 
@@ -79,6 +90,9 @@ func (*UnimplementedVideoServiceServer) PublishList(context.Context, *PublishLis
 }
 func (*UnimplementedVideoServiceServer) GetCommentList(context.Context, *CommentListRequest) (*CommentListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCommentList not implemented")
+}
+func (*UnimplementedVideoServiceServer) CommentAction(context.Context, *CommentActionRequest) (*CommentActionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CommentAction not implemented")
 }
 func (*UnimplementedVideoServiceServer) mustEmbedUnimplementedVideoServiceServer() {}
 
@@ -140,6 +154,24 @@ func _VideoService_GetCommentList_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VideoService_CommentAction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CommentActionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).CommentAction(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/video.VideoService/CommentAction",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).CommentAction(ctx, req.(*CommentActionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _VideoService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "video.VideoService",
 	HandlerType: (*VideoServiceServer)(nil),
@@ -155,6 +187,10 @@ var _VideoService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCommentList",
 			Handler:    _VideoService_GetCommentList_Handler,
+		},
+		{
+			MethodName: "CommentAction",
+			Handler:    _VideoService_CommentAction_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

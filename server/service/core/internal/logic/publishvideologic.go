@@ -46,7 +46,7 @@ func (l *PublishVideoLogic) PublishVideo(req *types.PublishRequest) (resp *types
 	}
 
 	resp.StatusCode = 0
-	resp.StatusMsg = ""
+	resp.StatusMsg = "上传成功"
 
 	return
 }

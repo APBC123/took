@@ -80,3 +80,16 @@ type CommentListResponse struct {
 	StatusMsg   string    `json:"status_msg,optional"`
 	CommentList []Comment `json:"comment_list,omitempty"`
 }
+
+type CommentActionRequest struct {
+	Token       string `form:"token"`
+	VideoId     int64  `form:"video_id"`
+	ActionType  int32  `form:"action_type"`
+	CommentText string `form:"comment_text,optional"`
+	CommentId   int64  `form:"comment_id,optional"`
+}
+
+type CommentActionResponse struct {
+	Response
+	Comment *Comment `json:"comment"`
+}

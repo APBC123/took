@@ -8,6 +8,7 @@ type Comment struct {
 	VideoId    int64
 	Content    string
 	CreateTime time.Time
+	Deleted    bool
 }
 
 func (table Comment) TableName() string {
