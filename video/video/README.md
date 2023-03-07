@@ -1,5 +1,5 @@
 ```text
-video\video\rpc
+启动rpc服务前需要启动etcd
 
 go run video.go -f etc/video.yaml
 

@@ -78,6 +78,19 @@ type CommentListResponse {
 	CommentList []Comment `json:"comment_list,omitempty"`
 }
 
+type CommentActionRequest {
+	Token       string `form:"token"`
+	VideoId     int64  `form:"video_id"`
+	ActionType  int32  `form:"action_type"`
+	CommentText string `form:"comment_text,optional"`
+	CommentId   int64  `form:"comment_id,optional"`
+}
+
+type CommentActionResponse {
+	Response
+	Comment *Comment `json:"comment"`
+}
+
 service core-api {
 	@handler GetVideo
 	get /douyin/feed(FeedRequest) returns(FeedResponse)
@@ -90,4 +103,7 @@ service core-api {
 	
 	@handler GetCommentList
 	get /douyin/comment/list(CommentListRequest) returns(CommentListResponse)
+	
+	@handler CommentAction
+	post /douyin/comment/action(CommentActionRequest) returns(CommentActionResponse)
 }

@@ -75,10 +75,26 @@ message CommentListResponse {
   repeated Comment CommentList = 3;
 }
 
+message CommentActionRequest {
+  string Token = 1;
+  int64 VideoId = 2;
+  int32 ActionType = 3;
+  string CommentText = 4;
+  int64 CommentId = 5;
+}
+
+message CommentActionResponse {
+  int32 StatusCode = 1;
+  string StatusMsg = 2;
+  Comment Comment = 3;
+}
+
 service VideoService {
   rpc GetVideo(FeedRequest) returns(FeedResponse);
 
   rpc PublishList(PublishListRequest) returns(PublishListResponse);
 
   rpc GetCommentList(CommentListRequest) returns(CommentListResponse);
+
+  rpc CommentAction(CommentActionRequest) returns(CommentActionResponse);
 }
