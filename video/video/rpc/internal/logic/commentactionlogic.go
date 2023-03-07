@@ -50,7 +50,7 @@ func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*vid
 	}
 	if in.ActionType == 1 {
 		ct := new(models2.Comment)
-		ct.UserId = 1
+		ct.UserId = uc.Id
 		ct.Content = in.CommentText
 		ct.VideoId = in.VideoId
 		ct.CreateTime = time.Now()
