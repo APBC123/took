@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"time"
+	"took/video/helper"
 	models2 "took/video/models"
 	"took/video/video/rpc/internal/svc"
 	"took/video/video/rpc/types/video"
@@ -25,17 +26,17 @@ func NewCommentActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Com
 }
 
 func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*video.CommentActionResponse, error) {
-	/*
-		uc, err := helper.AnalyzeToken(in.Token)
-		if err != nil {
-			return nil, err
-		}
-	*/
+
+	uc, err := helper.AnalyzeToken(in.Token)
+	if err != nil {
+		return nil, err
+	}
+
 	resp := new(video.CommentActionResponse)
 	if in.ActionType == 2 {
 		ct := new(models2.Comment)
 		ct.Deleted = true
-		_, err := l.svcCtx.Engine.Where("id = ?", in.CommentId).Cols("deleted").Update(ct)
+		_, err = l.svcCtx.Engine.Where("id = ?", in.CommentId).Cols("deleted").Update(ct)
 		if err != nil {
 			return nil, err
 		}
@@ -53,7 +54,7 @@ func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*vid
 		ct.Content = in.CommentText
 		ct.VideoId = in.VideoId
 		ct.CreateTime = time.Now()
-		_, err := l.svcCtx.Engine.Insert(ct)
+		_, err = l.svcCtx.Engine.Insert(ct)
 		if err != nil {
 			return nil, err
 		}
@@ -62,7 +63,7 @@ func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*vid
 			return nil, err
 		}
 		user := new(models2.User)
-		_, err = l.svcCtx.Engine.Where("id = ?", 1).Get(user)
+		_, err = l.svcCtx.Engine.Where("id = ?", uc.Id).Get(user)
 		if err != nil {
 			return nil, err
 		}
