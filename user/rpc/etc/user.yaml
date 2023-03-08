@@ -1,8 +1,12 @@
 Name: user.rpc
-ListenOn: 127.0.0.1:8080
+ListenOn: 0.0.0.0:8080
+Timeout: 5000
 Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: user.rpc
 Mysql:
   DataSource: root:jkl;@tcp(127.0.0.1)/took?charset=utf8mb4&parseTime=True&loc=Local
+JwtAuth:
+  AccessSecret: 39d63c69-4a4c-4763-92ba-73bbb80f22fe
+  AccessExpire: 3600
