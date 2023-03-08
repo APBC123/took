@@ -28,21 +28,13 @@ func (l *GetUserInfoLogic) GetUserInfo(in *user.UserInfoReq) (*user.UserInfoResp
 	var usr model.User;
 	l.svcCtx.Engine.Where("id=?", in.UserId).Get(&usr)
 
+	// 该接口用于用户本人获取人个信息，用户无法关注自己
+	respUser := user.NewUser(&usr)
+	respUser.IsFollow = false
+
 	return &user.UserInfoResp{
 		StatusCode: 0,
-		StatusMsg: "登录成功",
-		User: &user.User{
-			Id: usr.Id,
-			Username: usr.Username,
-			FollowCount: usr.FollowCount,
-			FollowerCount: usr.FollowerCount,
-			FavoriteCount: usr.FavoriteCount,
-			IsFollow: false, // TODO...
-			Avatar: usr.Avatar,
-			BackgroundImage: usr.BackgroundImage,
-			Signature: usr.Signature,
-			TotalFavorited: usr.TotalFavorited,
-			WorkCount: usr.WorkCount,
-		},
+		StatusMsg: "success",
+		User: respUser,
 	}, nil
 }

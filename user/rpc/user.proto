@@ -68,6 +68,7 @@ message UserInfoResp {
 
 // 关注操作
 message FollowReq {
+    int64 UserId = 1;
     int64 ToUserId = 2; 
     int32 ActionType = 3;
 }

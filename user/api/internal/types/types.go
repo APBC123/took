@@ -4,20 +4,20 @@ package types
 type User struct {
 	Id              int64  `json:"id"`
 	Username        string `json:"name"`
-	FollowCount     int64  `json:"follow_count,optional"`
-	FollowerCount   int64  `json:"follower_count,optional"`
+	FollowCount     int64  `json:"follow_count,omitempty"`
+	FollowerCount   int64  `json:"follower_count,omitempty"`
 	IsFollow        bool   `json:"is_follow"`
-	Avatar          string `json:"avatar,optional"`
-	BackgroundImage string `json:"background_image,optional"`
-	Signature       string `json:"signature,optional"`
-	TotalFavorited  int64  `json:"total_favorited,optional"`
-	WorkCount       int64  `json:"work_count,optional"`
-	FavoriteCount   int64  `json:"favorite_count,optional"`
+	Avatar          string `json:"avatar,omitempty"`
+	BackgroundImage string `json:"background_image,omitempty"`
+	Signature       string `json:"signature,omitempty"`
+	TotalFavorited  int64  `json:"total_favorited,omitempty"`
+	WorkCount       int64  `json:"work_count,omitempty"`
+	FavoriteCount   int64  `json:"favorite_count,omitempty"`
 }
 
 type FriendUser struct {
 	User
-	Message string `json:"message,optional"`
+	Message string `json:"message,omitempty"`
 	MsgType int64  `json:"msgType"`
 }
 
@@ -28,7 +28,7 @@ type RegisterReq struct {
 
 type RegisterResp struct {
 	StatusCode int32  `json:"status_code"`
-	StatusMsg  string `json:"status_msg,optional"`
+	StatusMsg  string `json:"status_msg,omitempty"`
 	UserId     int64  `json:"user_id"`
 	Token      string `json:"token"`
 }
@@ -40,7 +40,7 @@ type LoginReq struct {
 
 type LoginResp struct {
 	StatusCode int32  `json:"status_code"`
-	StatusMsg  string `json:"status_msg,optional"`
+	StatusMsg  string `json:"status_msg,omitempty"`
 	UserId     int64  `json:"user_id"`
 	Token      string `json:"token"`
 }
@@ -52,7 +52,7 @@ type UserInfoReq struct {
 
 type UserInfoResp struct {
 	StatusCode int32  `json:"status_code"`
-	StatusMsg  string `json:"status_msg,optional"`
+	StatusMsg  string `json:"status_msg,omitempty"`
 	User       User   `json:"user"`
 }
 
@@ -64,7 +64,7 @@ type FollowReq struct {
 
 type FollowResp struct {
 	StatusCode int32  `json:"status_code"`
-	StatusMsg  string `json:"status_msg,optional"`
+	StatusMsg  string `json:"status_msg,omitempty"`
 }
 
 type FollowListReq struct {
@@ -74,7 +74,7 @@ type FollowListReq struct {
 
 type FollowListResp struct {
 	StatusCode int32  `json:"status_code"`
-	StatusMsg  string `json:"status_msg,optional"`
+	StatusMsg  string `json:"status_msg,omitempty"`
 	UserList   []User `json:"user_list"`
 }
 
@@ -85,7 +85,7 @@ type FollowerListReq struct {
 
 type FollowerListResp struct {
 	StatusCode int32  `json:"status_code"`
-	StatusMsg  string `json:"status_msg,optional"`
+	StatusMsg  string `json:"status_msg,omitempty"`
 	UserList   []User `json:"user_list"`
 }
 
@@ -96,6 +96,6 @@ type FriendListReq struct {
 
 type FriendListResp struct {
 	StatusCode int32  `json:"status_code"`
-	StatusMsg  string `json:"status_msg,optional"`
+	StatusMsg  string `json:"status_msg,omitempty"`
 	UserList   []User `json:"user_list"`
 }

@@ -24,7 +24,13 @@ func NewGetFollowListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 }
 
 func (l *GetFollowListLogic) GetFollowList(in *user.FollowListReq) (*user.FollowListResp, error) {
-	// todo: add your logic here and delete this line
+	var followerList []*user.User
+	l.svcCtx.Engine.Table("user").Join("LEFT", "follow", "user.id = follow.user_id").Select(
+		"user.*").Where("follow.fan_id = ?", in.UserId).Find(&followerList)
 
-	return &user.FollowListResp{}, nil
+	return &user.FollowListResp{
+		StatusCode: 0,
+		StatusMsg: "success",
+		UserList: followerList,
+	}, nil
 }

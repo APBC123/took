@@ -2,7 +2,9 @@ package logic
 
 import (
 	"context"
+	// "fmt"
 
+	//"took/user/model"
 	"took/user/rpc/internal/svc"
 	"took/user/rpc/types/user"
 
@@ -24,7 +26,16 @@ func NewGetFollowerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 }
 
 func (l *GetFollowerListLogic) GetFollowerList(in *user.FollowerListReq) (*user.FollowerListResp, error) {
-	// todo: add your logic here and delete this line
+	var followerList []*user.User
+	l.svcCtx.Engine.Table("user").Join("LEFT", "follow", "user.id = follow.fan_id").Select(
+		"user.*").Where("follow.user_id = ?", in.UserId).Find(&followerList)
 
-	return &user.FollowerListResp{}, nil
+	// println("<============>")
+	// fmt.Printf("%#v", followerList)
+
+	return &user.FollowerListResp{
+		StatusCode: 0,
+		StatusMsg: "success",
+		UserList: followerList,
+	}, nil
 }

@@ -24,7 +24,18 @@ func NewGetFriendListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 }
 
 func (l *GetFriendListLogic) GetFriendList(in *user.FriendListReq) (*user.FriendListResp, error) {
-	// todo: add your logic here and delete this line
+	var friendList []*user.User
+	l.svcCtx.Engine.Table("user").Alias("u").Join(
+		"INNER", []string{"follow", "f1"}, "u.id = f1.user_id").Join(
+		"INNER", []string{"follow", "f2"}, "f1.user_id = f2.fan_id").Select("u.*").Where(
+		"f1.fan_id = ? AND f1.fan_id = f2.user_id", in.UserId).Find(&friendList)
 
-	return &user.FriendListResp{}, nil
+	// fmt.Println("<===============>")
+	// fmt.Print(friendList)
+
+	return &user.FriendListResp{
+		StatusCode: 0,
+		StatusMsg: "success",
+		UserList: friendList,
+	}, nil
 }
