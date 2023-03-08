@@ -32,6 +32,9 @@ func (l *CommentActionLogic) CommentAction(req *types.CommentActionRequest) (res
 		CommentText: req.CommentText,
 		CommentId:   req.CommentId,
 	})
+	if err != nil {
+		return nil, err
+	}
 	resp = new(types.CommentActionResponse)
 	if commentAction.Comment != nil {
 		resp.Comment = new(types.Comment)

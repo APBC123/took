@@ -89,6 +89,27 @@ message CommentActionResponse {
   Comment Comment = 3;
 }
 
+message FavoriteListRequest {
+  int64 UserId = 1;
+  string Token = 2;
+}
+
+message FavoriteListResponse {
+  int32 StatusCode = 1;
+  string StatusMsg = 2;
+  repeated Video VideoList = 3;
+}
+
+message FavoriteActionRequest {
+  string Token = 1;
+  int64 VideoId = 2;
+  int32 ActionType = 3;
+}
+
+message FavoriteActionResponse {
+  int32 StatusCode = 1;
+  string StatusMsg = 2;
+}
 service VideoService {
   rpc GetVideo(FeedRequest) returns(FeedResponse);
 
@@ -97,4 +118,8 @@ service VideoService {
   rpc GetCommentList(CommentListRequest) returns(CommentListResponse);
 
   rpc CommentAction(CommentActionRequest) returns(CommentActionResponse);
+
+  rpc FavoriteList(FavoriteListRequest) returns(FavoriteListResponse);
+
+  rpc FavoriteAction(FavoriteActionRequest) returns(FavoriteActionResponse);
 }

@@ -61,8 +61,8 @@ type PublishListResponse {
 }
 
 type CommentListRequest {
-	Token   string `json:"token,omitempty"`
-	VideoId int64  `json:"video_id,omitempty"`
+	Token   string `form:"token,omitempty"`
+	VideoId int64  `form:"video_id,omitempty"`
 }
 
 type Comment {
@@ -91,6 +91,26 @@ type CommentActionResponse {
 	Comment *Comment `json:"comment"`
 }
 
+type FavoriteListRequest {
+	UserId int64  `form:"user_id"`
+	Token  string `form:"token"`
+}
+
+type FavoriteListResponse {
+	Response
+	VideoList []Video `json:"video_list"`
+}
+
+type FavoriteActionRequest {
+	Token      string `form:"token"`
+	VideoId    int64  `form:"video_id"`
+	ActionType int32  `form:"action_type"`
+}
+
+type FavoriteActionResponse {
+	Response
+}
+
 service core-api {
 	@handler GetVideo
 	get /douyin/feed(FeedRequest) returns(FeedResponse)
@@ -106,4 +126,10 @@ service core-api {
 	
 	@handler CommentAction
 	post /douyin/comment/action(CommentActionRequest) returns(CommentActionResponse)
+	
+	@handler FavoriteList
+	get /douyin/favorite/list(FavoriteListRequest) returns(FavoriteListResponse)
+	
+	@handler FavoriteAction
+	post /douyin/favorite/action(FavoriteActionRequest) returns(FavoriteActionResponse)
 }

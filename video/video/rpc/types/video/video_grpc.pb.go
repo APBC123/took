@@ -21,6 +21,8 @@ type VideoServiceClient interface {
 	PublishList(ctx context.Context, in *PublishListRequest, opts ...grpc.CallOption) (*PublishListResponse, error)
 	GetCommentList(ctx context.Context, in *CommentListRequest, opts ...grpc.CallOption) (*CommentListResponse, error)
 	CommentAction(ctx context.Context, in *CommentActionRequest, opts ...grpc.CallOption) (*CommentActionResponse, error)
+	FavoriteList(ctx context.Context, in *FavoriteListRequest, opts ...grpc.CallOption) (*FavoriteListResponse, error)
+	FavoriteAction(ctx context.Context, in *FavoriteActionRequest, opts ...grpc.CallOption) (*FavoriteActionResponse, error)
 }
 
 type videoServiceClient struct {
@@ -67,6 +69,24 @@ func (c *videoServiceClient) CommentAction(ctx context.Context, in *CommentActio
 	return out, nil
 }
 
+func (c *videoServiceClient) FavoriteList(ctx context.Context, in *FavoriteListRequest, opts ...grpc.CallOption) (*FavoriteListResponse, error) {
+	out := new(FavoriteListResponse)
+	err := c.cc.Invoke(ctx, "/video.VideoService/FavoriteList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoServiceClient) FavoriteAction(ctx context.Context, in *FavoriteActionRequest, opts ...grpc.CallOption) (*FavoriteActionResponse, error) {
+	out := new(FavoriteActionResponse)
+	err := c.cc.Invoke(ctx, "/video.VideoService/FavoriteAction", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // VideoServiceServer is the server API for VideoService service.
 // All implementations must embed UnimplementedVideoServiceServer
 // for forward compatibility
@@ -75,6 +95,8 @@ type VideoServiceServer interface {
 	PublishList(context.Context, *PublishListRequest) (*PublishListResponse, error)
 	GetCommentList(context.Context, *CommentListRequest) (*CommentListResponse, error)
 	CommentAction(context.Context, *CommentActionRequest) (*CommentActionResponse, error)
+	FavoriteList(context.Context, *FavoriteListRequest) (*FavoriteListResponse, error)
+	FavoriteAction(context.Context, *FavoriteActionRequest) (*FavoriteActionResponse, error)
 	mustEmbedUnimplementedVideoServiceServer()
 }
 
@@ -93,6 +115,12 @@ func (*UnimplementedVideoServiceServer) GetCommentList(context.Context, *Comment
 }
 func (*UnimplementedVideoServiceServer) CommentAction(context.Context, *CommentActionRequest) (*CommentActionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CommentAction not implemented")
+}
+func (*UnimplementedVideoServiceServer) FavoriteList(context.Context, *FavoriteListRequest) (*FavoriteListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FavoriteList not implemented")
+}
+func (*UnimplementedVideoServiceServer) FavoriteAction(context.Context, *FavoriteActionRequest) (*FavoriteActionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FavoriteAction not implemented")
 }
 func (*UnimplementedVideoServiceServer) mustEmbedUnimplementedVideoServiceServer() {}
 
@@ -172,6 +200,42 @@ func _VideoService_CommentAction_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VideoService_FavoriteList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FavoriteListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).FavoriteList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/video.VideoService/FavoriteList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).FavoriteList(ctx, req.(*FavoriteListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoService_FavoriteAction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FavoriteActionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).FavoriteAction(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/video.VideoService/FavoriteAction",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).FavoriteAction(ctx, req.(*FavoriteActionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _VideoService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "video.VideoService",
 	HandlerType: (*VideoServiceServer)(nil),
@@ -191,6 +255,14 @@ var _VideoService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CommentAction",
 			Handler:    _VideoService_CommentAction_Handler,
+		},
+		{
+			MethodName: "FavoriteList",
+			Handler:    _VideoService_FavoriteList_Handler,
+		},
+		{
+			MethodName: "FavoriteAction",
+			Handler:    _VideoService_FavoriteAction_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
