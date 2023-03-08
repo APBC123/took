@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 
+	"took/user/api/internal/helper"
 	"took/user/api/internal/svc"
 	"took/user/api/internal/types"
 	"took/user/rpc/types/user"
@@ -26,9 +27,16 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 
 func (l *GetUserInfoLogic) GetUserInfo(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
 
+	_, err = helper.AnalyzeToken(req.Token, l.svcCtx.Config.JwtAuth.SecretKey)
+	if err != nil {
+		return &types.UserInfoResp{
+			StatusCode: 3,
+			StatusMsg: err.Error(),
+		}, nil;
+	}
+
 	rpcResp, _ := l.svcCtx.UserRpc.GetUserInfo(l.ctx, &user.UserInfoReq{
 		UserId: req.UserId,
-		Token: req.Token,
 	})
 	
 	return &types.UserInfoResp{

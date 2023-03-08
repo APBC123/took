@@ -5,6 +5,7 @@ import (
 	"errors"
 	"strings"
 
+	"took/user/api/internal/helper"
 	"took/user/api/internal/svc"
 	"took/user/api/internal/types"
 	"took/user/rpc/types/user"
@@ -35,11 +36,20 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		Username: req.Password,
 		Password: req.Password,
 	})
+	if rpcResp.StatusCode != 0 {
+		return &types.RegisterResp{
+			StatusCode: rpcResp.StatusCode,
+			StatusMsg: rpcResp.StatusMsg,
+		}, nil
+	}
+
+	jwtToken, _ := helper.GenerateToken(rpcResp.UserId, req.Username, req.Password, 
+	l.svcCtx.Config.JwtAuth.SecretKey, l.svcCtx.Config.JwtAuth.Duration)
 
 	return &types.RegisterResp{
 		StatusCode: rpcResp.StatusCode,
 		StatusMsg: rpcResp.StatusMsg,
 		UserId: rpcResp.UserId,
-		Token: rpcResp.Token,	
+		Token: jwtToken,
 	}, nil
 }

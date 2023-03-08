@@ -21,6 +21,7 @@ type (
 	FollowerListResp = user.FollowerListResp
 	FriendListReq    = user.FriendListReq
 	FriendListResp   = user.FriendListResp
+	FriendUser       = user.FriendUser
 	LoginReq         = user.LoginReq
 	LoginResp        = user.LoginResp
 	RegisterReq      = user.RegisterReq

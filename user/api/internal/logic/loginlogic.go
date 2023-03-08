@@ -7,6 +7,7 @@ import (
 
 	"took/user/api/internal/svc"
 	"took/user/api/internal/types"
+	"took/user/api/internal/helper"
 	"took/user/rpc/types/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -35,11 +36,20 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 		Username: req.Username,
 		Password: req.Password,
 	})
-	
+	if rpcResp.StatusCode != 0 {
+		return &types.LoginResp{
+			StatusCode: rpcResp.StatusCode,
+			StatusMsg: rpcResp.StatusMsg,
+		}, nil
+	}
+
+	jwtToken, _ := helper.GenerateToken(rpcResp.UserId, req.Username, req.Password,
+		l.svcCtx.Config.JwtAuth.SecretKey, l.svcCtx.Config.JwtAuth.Duration)
+
 	return &types.LoginResp{
 		StatusCode: rpcResp.StatusCode,
 		StatusMsg: rpcResp.StatusMsg,
 		UserId: rpcResp.UserId,
-		Token: rpcResp.Token,
+		Token: jwtToken,
 	}, nil
 }

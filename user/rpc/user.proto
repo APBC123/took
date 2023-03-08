@@ -18,16 +18,31 @@ message User {
 	int64 FavoriteCount = 11;
 }
 
+message FriendUser {
+	int64 Id = 1;
+	string Username = 2;
+	int64 FollowCount = 3;   
+	int64 FollowerCount = 4; 
+	bool IsFollow = 5;
+	string Avatar = 6;
+	string BackgroundImage = 7;
+	string Signature = 8;
+	int64 TotalFavorited = 9;  
+	int64 WorkCount = 10;
+	int64 FavoriteCount = 11;
+    string Message = 12;
+    int64 MsgType = 13;
+}
+
 // 用户注册
 message RegisterReq {
     string Username = 1;
     string Password = 2;
 }
 message RegisterResp {
-    int64 StatusCode = 1;
+    int32 StatusCode = 1;
     string StatusMsg = 2;
-    int64 UserId = 3;  
-    string Token = 4;
+    int64 UserId = 3;
 }
 
 // 用户登录
@@ -36,64 +51,58 @@ message LoginReq {
     string Password = 2;
 }
 message LoginResp {
-    int64 StatusCode = 1;
+    int32 StatusCode = 1;
     string StatusMsg = 2;
     int64 UserId = 3;
-    string Token = 4; 
 }
 
 // 获取用户信息
 message UserInfoReq {
     int64 UserId = 1;
-    string Token = 2;
 }
 message UserInfoResp {
-    int64 StatusCode = 1;
+    int32 StatusCode = 1;
     string StatusMsg = 2;
     User User = 3;
 }
 
 // 关注操作
 message FollowReq {
-    string Token = 1; 
-    string ToUserId = 2; 
-    string ActionType = 3;
+    int64 ToUserId = 2; 
+    int32 ActionType = 3;
 }
 message FollowResp {
-    int64 StatusCode = 1;
+    int32 StatusCode = 1;
     string StatusMsg = 2;
 }
 
 // 获取关注列表
 message FollowListReq {
-    string UserId = 1;
-    string Token = 2;
+    int64 UserId = 1;
 }
 message FollowListResp {
-    string StatusCode = 1;
+    int32 StatusCode = 1;
     string StatusMsg = 2;
     repeated User UserList = 3;
 }
 
 // 获取粉丝列表
 message FollowerListReq {
-    string UserId = 1;
-    string Token = 2;
+    int64 UserId = 1;
 }
 message FollowerListResp {
-    string StatusCode = 1;
+    int32 StatusCode = 1;
     string StatusMsg = 2;
     repeated User UserList = 3;
 }
 
 // 获取好友列表
 message FriendListReq {
-    string UserId = 1;
-    string Token = 2;
+    int64 UserId = 1;
 }
 
 message FriendListResp {
-    string StatusCode = 1;
+    int32 StatusCode = 1;
     string StatusMsg = 2;
     repeated User UserList = 3;
 }

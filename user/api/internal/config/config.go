@@ -13,8 +13,8 @@ type Config struct {
 	}
 	CacheRedis cache.CacheConf
 	JwtAuth struct {
-		AccessSecret string
-		AccessExpire int64
+		SecretKey string
+		Duration int64
 	}
 	UserRpc zrpc.RpcClientConf
 }

@@ -30,7 +30,7 @@ func (l *GetUserInfoLogic) GetUserInfo(in *user.UserInfoReq) (*user.UserInfoResp
 
 	return &user.UserInfoResp{
 		StatusCode: 0,
-		StatusMsg: "success",
+		StatusMsg: "登录成功",
 		User: &user.User{
 			Id: usr.Id,
 			Username: usr.Username,
