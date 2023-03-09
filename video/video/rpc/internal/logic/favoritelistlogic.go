@@ -26,13 +26,15 @@ func NewFavoriteListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Favo
 }
 
 func (l *FavoriteListLogic) FavoriteList(in *video.FavoriteListRequest) (*video.FavoriteListResponse, error) {
-	_, err := helper.AnalyzeToken(in.Token)
-	if err != nil {
-		return nil, err
+	if in.Token != "" {
+		_, err := helper.AnalyzeToken(in.Token)
+		if err != nil {
+			return nil, err
+		}
 	}
 	resp := new(video.FavoriteListResponse)
 	FavoriteList := make([]*models2.Favorite, 0)
-	err = l.svcCtx.Engine.Where("user_id = ?", in.UserId).Find(&FavoriteList)
+	err := l.svcCtx.Engine.Where("user_id = ? AND deleted = ? AND removed = ?", in.UserId, false, false).Find(&FavoriteList)
 	if err != nil {
 		return nil, err
 	}
@@ -40,9 +42,15 @@ func (l *FavoriteListLogic) FavoriteList(in *video.FavoriteListRequest) (*video.
 	for i := range resp.VideoList {
 		resp.VideoList[i] = new(video.Video)
 		vd := new(models2.Video)
-		_, err = l.svcCtx.Engine.Where("video_id = ? AND deleted = ? AND removed = ?", FavoriteList[i].VideoId, false, false).Get(vd)
+		_, err = l.svcCtx.Engine.Where("id = ? AND deleted = ? AND removed = ?", FavoriteList[i].VideoId, false, false).Get(vd)
+		if err != nil {
+			return nil, err
+		}
 		ur := new(models2.User)
 		_, err = l.svcCtx.Engine.Where("id = ? AND enable = ? AND deleted = ?", vd.AuthorId, true, false).Get(ur)
+		if err != nil {
+			return nil, err
+		}
 		resp.VideoList[i].IsFavorite = true
 		resp.VideoList[i].Id = vd.Id
 		resp.VideoList[i].Title = vd.Title

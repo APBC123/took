@@ -64,7 +64,7 @@ type PublishListResponse struct {
 }
 
 type CommentListRequest struct {
-	Token   string `form:"token,omitempty"`
+	Token   string `form:"token,optional"`
 	VideoId int64  `form:"video_id,omitempty"`
 }
 
@@ -96,7 +96,7 @@ type CommentActionResponse struct {
 
 type FavoriteListRequest struct {
 	UserId int64  `form:"user_id"`
-	Token  string `form:"token"`
+	Token  string `form:"token,optional"`
 }
 
 type FavoriteListResponse struct {
@@ -105,7 +105,7 @@ type FavoriteListResponse struct {
 }
 
 type FavoriteActionRequest struct {
-	Token      string `form:"token"`
+	Token      string `form:"token,optional"`
 	VideoId    int64  `form:"video_id"`
 	ActionType int32  `form:"action_type"`
 }

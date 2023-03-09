@@ -33,6 +33,7 @@ func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*vid
 	}
 
 	resp := new(video.CommentActionResponse)
+	//评论删除
 	if in.ActionType == 2 {
 		ct := new(models2.Comment)
 		ct.Deleted = true
@@ -48,6 +49,7 @@ func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*vid
 		resp.StatusMsg = "删除成功"
 		resp.StatusCode = 0
 	}
+	//评论提交
 	if in.ActionType == 1 {
 		ct := new(models2.Comment)
 		ct.UserId = uc.Id

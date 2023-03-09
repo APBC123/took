@@ -61,7 +61,7 @@ type PublishListResponse {
 }
 
 type CommentListRequest {
-	Token   string `form:"token,omitempty"`
+	Token   string `form:"token,optional"`
 	VideoId int64  `form:"video_id,omitempty"`
 }
 
@@ -93,7 +93,7 @@ type CommentActionResponse {
 
 type FavoriteListRequest {
 	UserId int64  `form:"user_id"`
-	Token  string `form:"token"`
+	Token  string `form:"token,optional"`
 }
 
 type FavoriteListResponse {
@@ -102,7 +102,7 @@ type FavoriteListResponse {
 }
 
 type FavoriteActionRequest {
-	Token      string `form:"token"`
+	Token      string `form:"token,optional"`
 	VideoId    int64  `form:"video_id"`
 	ActionType int32  `form:"action_type"`
 }
