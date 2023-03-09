@@ -33,7 +33,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 
 	rpcResp, _ := l.svcCtx.UserRpc.Register(l.ctx, &user.RegisterReq{
-		Username: req.Password,
+		Username: req.Username,
 		Password: req.Password,
 	})
 	if rpcResp.StatusCode != 0 {

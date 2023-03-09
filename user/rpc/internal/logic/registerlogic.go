@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"crypto/md5"
+	"fmt"
 
 	"took/user/model"
 	"took/user/rpc/internal/svc"
@@ -31,20 +33,20 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 	if has {
 		return &user.RegisterResp{
 			StatusCode: 1,
-			StatusMsg: "该用户名已存在",
+			StatusMsg: "用户名已存在",
 		}, nil
 	}
-	
+
 	usr := model.User {
 		Username: in.Username,
-		Password: in.Password,
-		Enable: 1,
+		Password: fmt.Sprintf("%x", md5.Sum([]byte(in.Password))), // 哈希加密
 		Avatar: "https://pannta-picture.oss-cn-shenzhen.aliyuncs.com/20230308051013.jpg",
 		BackgroundImage: "https://vip1.loli.io/2022/05/11/Nd4lgGtMrFpa8PW.jpg",
 		Signature: "爱好是吃蛋挞",
 	}
 
-	l.svcCtx.Engine.Insert(&usr)
+	l.svcCtx.Engine.Cols("username", "password", "avatar", "background_image",
+	 "signature").Insert(&usr)
 
 	return &user.RegisterResp{
 		StatusCode: 0,
