@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"took/server/service/core/helper"
 	"took/video/video/rpc/types/video"
 
 	"took/server/service/core/internal/svc"
@@ -41,17 +42,7 @@ func (l *CommentActionLogic) CommentAction(req *types.CommentActionRequest) (res
 		resp.Comment.Id = commentAction.Comment.Id
 		resp.Comment.Content = commentAction.Comment.Content
 		resp.Comment.CreateDate = commentAction.Comment.CreateDate
-		resp.Comment.User.Id = commentAction.Comment.User.Id
-		resp.Comment.User.Username = commentAction.Comment.User.Username
-		resp.Comment.User.FollowCount = commentAction.Comment.User.FollowCount
-		resp.Comment.User.FollowerCount = commentAction.Comment.User.FollowerCount
-		resp.Comment.User.IsFollow = commentAction.Comment.User.IsFollow
-		resp.Comment.User.WorkCount = commentAction.Comment.User.WorkCount
-		resp.Comment.User.TotalFavorited = commentAction.Comment.User.TotalFavorited
-		resp.Comment.User.FavoriteCount = commentAction.Comment.User.FavoriteCount
-		resp.Comment.User.Avatar = commentAction.Comment.User.Avatar
-		resp.Comment.User.BackgroundImage = commentAction.Comment.User.BackgroundImage
-		resp.Comment.User.Signature = commentAction.Comment.User.Signature
+		resp.Comment.User = helper.NewUser(commentAction.Comment.User)
 	}
 
 	resp.StatusMsg = commentAction.StatusMsg

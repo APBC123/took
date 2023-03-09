@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"took/server/service/core/helper"
 	"took/video/video/rpc/types/video"
 
 	"took/server/service/core/internal/svc"
@@ -42,18 +43,7 @@ func (l *FavoriteListLogic) FavoriteList(req *types.FavoriteListRequest) (resp *
 		resp.VideoList[i].CoverUrl = favoriteList.VideoList[i].CoverUrl
 		resp.VideoList[i].CommentCount = favoriteList.VideoList[i].CommentCount
 		resp.VideoList[i].FavoriteCount = favoriteList.VideoList[i].FavoriteCount
-		resp.VideoList[i].Author.Id = favoriteList.VideoList[i].Author.Id
-		resp.VideoList[i].Author.Username = favoriteList.VideoList[i].Author.Username
-		resp.VideoList[i].Author.Signature = favoriteList.VideoList[i].Author.Signature
-		resp.VideoList[i].Author.Avatar = favoriteList.VideoList[i].Author.Avatar
-		resp.VideoList[i].Author.BackgroundImage = favoriteList.VideoList[i].Author.BackgroundImage
-		resp.VideoList[i].Author.IsFollow = favoriteList.VideoList[i].Author.IsFollow
-		resp.VideoList[i].Author.FollowCount = favoriteList.VideoList[i].Author.FollowCount
-		resp.VideoList[i].Author.FollowerCount = favoriteList.VideoList[i].Author.FollowerCount
-		resp.VideoList[i].Author.TotalFavorited = favoriteList.VideoList[i].Author.TotalFavorited
-		resp.VideoList[i].Author.FavoriteCount = favoriteList.VideoList[i].Author.FavoriteCount
-		resp.VideoList[i].Author.WorkCount = favoriteList.VideoList[i].Author.WorkCount
-
+		resp.VideoList[i].Author = helper.NewUser(favoriteList.VideoList[i].Author)
 	}
 	resp.StatusCode = 0
 	resp.StatusMsg = ""

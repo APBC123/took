@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"took/server/service/core/helper"
 	"took/server/service/core/internal/svc"
 	"took/server/service/core/internal/types"
 	"took/video/video/rpc/types/video"
@@ -45,17 +46,7 @@ func (l *GetVideoLogic) GetVideo(req *types.FeedRequest) (resp *types.FeedRespon
 		resp.VideoList[i].FavoriteCount = list[i].FavoriteCount
 		resp.VideoList[i].CommentCount = list[i].CommentCount
 		resp.VideoList[i].IsFavorite = list[i].IsFavorite
-		resp.VideoList[i].Author.Id = list[i].Author.Id
-		resp.VideoList[i].Author.Username = list[i].Author.Username
-		resp.VideoList[i].Author.FollowCount = list[i].Author.FollowCount
-		resp.VideoList[i].Author.IsFollow = list[i].Author.IsFollow
-		resp.VideoList[i].Author.FollowerCount = list[i].Author.FollowerCount
-		resp.VideoList[i].Author.Avatar = list[i].Author.Avatar
-		resp.VideoList[i].Author.BackgroundImage = list[i].Author.BackgroundImage
-		resp.VideoList[i].Author.Signature = list[i].Author.Signature
-		resp.VideoList[i].Author.TotalFavorited = list[i].Author.TotalFavorited
-		resp.VideoList[i].Author.FavoriteCount = list[i].Author.FavoriteCount
-		resp.VideoList[i].Author.WorkCount = list[i].Author.WorkCount
+		resp.VideoList[i].Author = helper.NewUser(list[i].Author)
 	}
 
 	return resp, nil
