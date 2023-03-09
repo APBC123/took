@@ -3,8 +3,10 @@ package logic
 import (
 	"context"
 
+	"took/user/api/internal/helper"
 	"took/user/api/internal/svc"
 	"took/user/api/internal/types"
+	"took/user/rpc/types/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +26,21 @@ func NewGetFriendListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 }
 
 func (l *GetFriendListLogic) GetFriendList(req *types.FriendListReq) (resp *types.FriendListResp, err error) {
-	// todo: add your logic here and delete this line
+	_, err = helper.AnalyzeToken(req.Token, l.svcCtx.Config.JwtAuth.SecretKey)
+	if err != nil {
+		return &types.FriendListResp{
+			StatusCode: 3,
+			StatusMsg: err.Error(),
+		}, nil;
+	}
 
-	return
+	rpcResp, _ := l.svcCtx.UserRpc.GetFriendList(l.ctx, &user.FriendListReq{
+		UserId: req.UserId,
+	})
+
+	return &types.FriendListResp{
+		StatusCode: 0,
+		StatusMsg: "success",
+		UserList: types.NewUserList(rpcResp.UserList),
+	}, nil
 }

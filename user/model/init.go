@@ -12,5 +12,6 @@ func NewEngine(DataSource string) *xorm.Engine {
 		log.Printf("Xorm New Engine Error:%v", err)
 		return nil
 	}
+	engine.ShowSQL(true)
 	return engine
 }

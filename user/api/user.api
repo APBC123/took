@@ -3,15 +3,21 @@ syntax = "v1"
 type User {
 	Id              int64  `json:"id"`
 	Username        string `json:"name"`
-	FollowCount     int64  `json:"follow_count"`
-	FollowerCount   int64  `json:"follower_count"`
+	FollowCount     int64  `json:"follow_count,omitempty"`
+	FollowerCount   int64  `json:"follower_count,omitempty"`
 	IsFollow        bool   `json:"is_follow"`
-	Avatar          string `json:"avatar"`
-	BackgroundImage string `json:"background_image"`
-	Signature       string `json:"signature"`
-	TotalFavorited  string `json:"total_favorited"`
-	WorkCount       int64  `json:"work_count"`
-	FavoriteCount   int64  `json:"favorite_count"`
+	Avatar          string `json:"avatar,omitempty"`
+	BackgroundImage string `json:"background_image,omitempty"`
+	Signature       string `json:"signature,omitempty"`
+	TotalFavorited  int64  `json:"total_favorited,omitempty"`
+	WorkCount       int64  `json:"work_count,omitempty"`
+	FavoriteCount   int64  `json:"favorite_count,omitempty"`
+}
+
+type FriendUser {
+	User
+	Message string `json:"message,omitempty"`
+	MsgType int64  `json:"msgType"`
 }
 
 // 用户注册
@@ -22,8 +28,8 @@ type (
 	}
 
 	RegisterResp {
-		StatusCode int64  `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg,omitempty"`
 		UserId     int64  `json:"user_id"`
 		Token      string `json:"token"`
 	}
@@ -37,10 +43,10 @@ type (
 	}
 
 	LoginResp {
-		StatusCode int64  `json:"status_code"`
+		StatusCode int32  `json:"status_code"`
 		StatusMsg  string `json:"status_msg,omitempty"`
-		UserId     int64  `json:"user_id,omitempty"`
-		Token      string `json:"token,omitempty"`
+		UserId     int64  `json:"user_id"`
+		Token      string `json:"token"`
 	}
 )
 
@@ -52,9 +58,9 @@ type (
 	}
 
 	UserInfoResp {
-		StatusCode int64  `json:"status_code"`
+		StatusCode int32  `json:"status_code"`
 		StatusMsg  string `json:"status_msg,omitempty"`
-		User       User   `json:"user,omitempty"`
+		User       User   `json:"user"`
 	}
 )
 
@@ -62,55 +68,55 @@ type (
 type (
 	FollowReq {
 		Token      string `form:"token"`
-		ToUserId   string `form:"to_user_id"`
-		ActionType string `form:"action_type"`
+		ToUserId   int64  `form:"to_user_id"`
+		ActionType int32  `form:"action_type"`
 	}
 
 	FollowResp {
-		StatusCode int64  `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg,omitempty"`
 	}
 )
 
 // 获取关注列表
 type (
 	FollowListReq {
-		UserId string `form:"user_id"`
+		UserId int64  `form:"user_id"`
 		Token  string `form:"token"`
 	}
 
 	FollowListResp {
-		StatusCode string `json:"status_code"`
+		StatusCode int32  `json:"status_code"`
 		StatusMsg  string `json:"status_msg,omitempty"`
-		UserList   []User `json:"user_list,omitempty"`
+		UserList   []User `json:"user_list"`
 	}
 )
 
 // 获取粉丝列表
 type (
 	FollowerListReq {
-		UserId string `form:"user_id"`
+		UserId int64  `form:"user_id"`
 		Token  string `form:"token"`
 	}
 
 	FollowerListResp {
-		StatusCode string `json:"status_code"`
+		StatusCode int32  `json:"status_code"`
 		StatusMsg  string `json:"status_msg,omitempty"`
-		UserList   []User `json:"user_list,omitempty"`
+		UserList   []User `json:"user_list"`
 	}
 )
 
 // 获取好友列表
 type (
 	FriendListReq {
-		UserId string `form:"user_id"`
+		UserId int64  `form:"user_id"`
 		Token  string `form:"token"`
 	}
 
 	FriendListResp {
-		StatusCode string `json:"status_code"`
+		StatusCode int32  `json:"status_code"`
 		StatusMsg  string `json:"status_msg,omitempty"`
-		UserList   []User `json:"user_list,omitempty"`
+		UserList   []User `json:"user_list"`
 	}
 )
 
@@ -131,7 +137,7 @@ service user-api {
 	get /douyin/relation/follow/list(FollowListReq) returns(FollowListResp)
 	
 	@handler GetFollowerList
-	get /douyin/realtion/follower/list(FollowerListReq) returns(FollowerListResp)
+	get /douyin/relation/follower/list(FollowerListReq) returns(FollowerListResp)
 	
 	@handler GetFriendList
 	get /douyin/relation/friend/list(FriendListReq) returns(FriendListResp)

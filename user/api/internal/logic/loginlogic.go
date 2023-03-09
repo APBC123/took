@@ -4,13 +4,12 @@ import (
 	"context"
 	"errors"
 	"strings"
-	"time"
 
 	"took/user/api/internal/svc"
 	"took/user/api/internal/types"
-	"took/user/model"
+	"took/user/api/internal/helper"
+	"took/user/rpc/types/user"
 
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -18,16 +17,6 @@ type LoginLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
-}
-
-func (l *LoginLogic) getJwtToken(secretKey string, iat, seconds, userId int64) (string, error) {
-	claims := make(jwt.MapClaims)
-	claims["iat"] = iat
-	claims["exp"] = iat + seconds
-	claims["userId"] = userId
-	token := jwt.New(jwt.SigningMethodHS256)
-	token.Claims = claims
-	return token.SignedString([]byte(secretKey))
 }
 
 func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic {
@@ -43,22 +32,24 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 		return nil, errors.New("参数错误")
 	}
 
-	var user model.User
-	has, _ := l.svcCtx.Engine.Where("username=? AND password=?", req.Username, req.Password).Get(&user)
-
-	if !has {
+	rpcResp, _ := l.svcCtx.UserRpc.Login(l.ctx, &user.LoginReq{
+		Username: req.Username,
+		Password: req.Password,
+	})
+	if rpcResp.StatusCode != 0 {
 		return &types.LoginResp{
-			StatusCode: 1,
-			StatusMsg: "用户名或密码错误",
+			StatusCode: rpcResp.StatusCode,
+			StatusMsg: rpcResp.StatusMsg,
 		}, nil
 	}
 
-	jwtToken, _ := l.getJwtToken(l.svcCtx.Config.Auth.AccessSecret, time.Now().Unix(), l.svcCtx.Config.Auth.AccessExpire, user.Id)
+	jwtToken, _ := helper.GenerateToken(rpcResp.UserId, req.Username, req.Password,
+		l.svcCtx.Config.JwtAuth.SecretKey, l.svcCtx.Config.JwtAuth.Duration)
 
 	return &types.LoginResp{
-		StatusCode: 0,
-		StatusMsg: "登录成功",
-		UserId: user.Id,
+		StatusCode: rpcResp.StatusCode,
+		StatusMsg: rpcResp.StatusMsg,
+		UserId: rpcResp.UserId,
 		Token: jwtToken,
 	}, nil
 }
