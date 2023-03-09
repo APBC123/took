@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./user";
+
+message User {
+	int64 Id = 1;
+	string Username = 2;
+	int64 FollowCount = 3;   
+	int64 FollowerCount = 4; 
+	bool IsFollow = 5;
+	string Avatar = 6;
+	string BackgroundImage = 7;
+	string Signature = 8;
+	int64 TotalFavorited = 9;  
+	int64 WorkCount = 10;
+	int64 FavoriteCount = 11;
+}
+
+message FriendUser {
+	int64 Id = 1;
+	string Username = 2;
+	int64 FollowCount = 3;   
+	int64 FollowerCount = 4; 
+	bool IsFollow = 5;
+	string Avatar = 6;
+	string BackgroundImage = 7;
+	string Signature = 8;
+	int64 TotalFavorited = 9;  
+	int64 WorkCount = 10;
+	int64 FavoriteCount = 11;
+    string Message = 12;
+    int64 MsgType = 13;
+}
+
+// 用户注册
+message RegisterReq {
+    string Username = 1;
+    string Password = 2;
+}
+message RegisterResp {
+    int32 StatusCode = 1;
+    string StatusMsg = 2;
+    int64 UserId = 3;
+}
+
+// 用户登录
+message LoginReq {
+    string Username = 1;
+    string Password = 2;
+}
+message LoginResp {
+    int32 StatusCode = 1;
+    string StatusMsg = 2;
+    int64 UserId = 3;
+}
+
+// 获取用户信息
+message UserInfoReq {
+    int64 UserId = 1;
+}
+message UserInfoResp {
+    int32 StatusCode = 1;
+    string StatusMsg = 2;
+    User User = 3;
+}
+
+// 关注操作
+message FollowReq {
+    int64 UserId = 1;
+    int64 ToUserId = 2; 
+    int32 ActionType = 3;
+}
+message FollowResp {
+    int32 StatusCode = 1;
+    string StatusMsg = 2;
+}
+
+// 获取关注列表
+message FollowListReq {
+    int64 UserId = 1;
+}
+message FollowListResp {
+    int32 StatusCode = 1;
+    string StatusMsg = 2;
+    repeated User UserList = 3;
+}
+
+// 获取粉丝列表
+message FollowerListReq {
+    int64 UserId = 1;
+}
+message FollowerListResp {
+    int32 StatusCode = 1;
+    string StatusMsg = 2;
+    repeated User UserList = 3;
+}
+
+// 获取好友列表
+message FriendListReq {
+    int64 UserId = 1;
+}
+
+message FriendListResp {
+    int32 StatusCode = 1;
+    string StatusMsg = 2;
+    repeated User UserList = 3;
+}
+
+service UserService { 
+	rpc Register(RegisterReq) returns(RegisterResp);
+	
+	rpc Login(LoginReq) returns(LoginResp);
+	
+	rpc GetUserInfo(UserInfoReq) returns(UserInfoResp);
+	
+	rpc Follow(FollowReq) returns(FollowResp);
+	
+	rpc GetFollowList(FollowListReq) returns(FollowListResp);
+	
+	rpc GetFollowerList(FollowerListReq) returns(FollowerListResp);
+	
+	rpc GetFriendList(FriendListReq) returns(FriendListResp);
+}

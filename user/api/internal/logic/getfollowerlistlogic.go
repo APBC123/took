@@ -3,8 +3,10 @@ package logic
 import (
 	"context"
 
+	"took/user/api/internal/helper"
 	"took/user/api/internal/svc"
 	"took/user/api/internal/types"
+	"took/user/rpc/types/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +26,21 @@ func NewGetFollowerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 }
 
 func (l *GetFollowerListLogic) GetFollowerList(req *types.FollowerListReq) (resp *types.FollowerListResp, err error) {
-	// todo: add your logic here and delete this line
+	_, err = helper.AnalyzeToken(req.Token, l.svcCtx.Config.JwtAuth.SecretKey)
+	if err != nil {
+		return &types.FollowerListResp{
+			StatusCode: 3,
+			StatusMsg: err.Error(),
+		}, nil;
+	}
 
-	return
+	rpcResp, _ := l.svcCtx.UserRpc.GetFollowerList(l.ctx, &user.FollowerListReq{
+		UserId: req.UserId,
+	})
+
+	return &types.FollowerListResp{
+		StatusCode: rpcResp.StatusCode,
+		StatusMsg: rpcResp.StatusMsg,
+		UserList: types.NewUserList(rpcResp.UserList),
+	}, nil
 }

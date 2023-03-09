@@ -3,9 +3,10 @@ package logic
 import (
 	"context"
 
+	"took/user/api/internal/helper"
 	"took/user/api/internal/svc"
 	"took/user/api/internal/types"
-	"took/user/model"
+	"took/user/rpc/types/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,25 +26,21 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
+	_, err = helper.AnalyzeToken(req.Token, l.svcCtx.Config.JwtAuth.SecretKey)
+	if err != nil {
+		return &types.UserInfoResp{
+			StatusCode: 3,
+			StatusMsg: err.Error(),
+		}, nil;
+	}
 
-	var user model.User;
-	l.svcCtx.Engine.Where("id=?", req.UserId).Get(&user)
-
+	rpcResp, _ := l.svcCtx.UserRpc.GetUserInfo(l.ctx, &user.UserInfoReq{
+		UserId: req.UserId,
+	})
+	
 	return &types.UserInfoResp{
-		StatusCode: 0,
-		StatusMsg: "success",
-		User: types.User{
-			Id: user.Id,
-			Username: user.Username,
-			FollowCount: user.FollowCount,
-			FollowerCount: user.FollowerCount,
-			FavoriteCount: user.FavoriteCount,
-			IsFollow: false, // TODO...
-			Avatar: user.Avatar,
-			BackgroundImage: user.BackgroundImage,
-			Signature: user.Signature,
-			TotalFavorited: user.TotalFavorited,
-			WorkCount: user.WorkCount,
-		},
+		StatusCode: rpcResp.StatusCode,
+		StatusMsg: rpcResp.StatusMsg,
+		User: types.NewUser(rpcResp.User),
 	}, nil
 }

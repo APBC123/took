@@ -39,7 +39,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/douyin/realtion/follower/list",
+				Path:    "/douyin/relation/follower/list",
 				Handler: GetFollowerListHandler(serverCtx),
 			},
 			{
