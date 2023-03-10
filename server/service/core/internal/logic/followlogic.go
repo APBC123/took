@@ -3,9 +3,9 @@ package logic
 import (
 	"context"
 
-	"took/user/api/internal/helper"
-	"took/user/api/internal/svc"
-	"took/user/api/internal/types"
+	"took/server/service/core/helper"
+	"took/server/service/core/internal/svc"
+	"took/server/service/core/internal/types"
 	"took/user/rpc/types/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -39,6 +39,12 @@ func (l *FollowLogic) Follow(req *types.FollowReq) (resp *types.FollowResp, err 
 		ToUserId: req.ToUserId,
 		ActionType: req.ActionType,
 	})
+	if rpcResp.StatusCode != 0 {
+		return &types.FollowResp{
+			StatusCode: rpcResp.StatusCode,
+			StatusMsg: rpcResp.StatusMsg,
+		}, nil
+	}
 
 	return &types.FollowResp{
 		StatusCode: rpcResp.StatusCode,

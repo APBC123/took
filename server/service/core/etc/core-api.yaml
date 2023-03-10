@@ -9,6 +9,13 @@ VideoRpc:
       - 127.0.0.1:2379
     Key: video.rpc
   Timeout: 5000
-
+UserRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: user.rpc
+JwtAuth:
+  SecretKey: took
+  Duration: 3600
 Mysql:
   DataSource: root:wang991102@tcp(127.0.0.1)/zijie?charset=utf8mb4&parseTime=True&loc=Local
