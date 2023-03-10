@@ -54,10 +54,10 @@ func (l *GetVideoLogic) GetVideo(in *video.FeedRequest) (*video.FeedResponse, er
 	if err != nil {
 		return nil, err
 	}
-	listResp := make([]*video.Video, 8)
+	listResp := make([]*video.Video, len(vdList))
 	for i := range vdList {
 		ur := new(models2.User)
-		has, _ := l.svcCtx.Engine.Where("id = ? AND enable = ? AND deleted = ?", vdList[i].AuthorId, true, false).Get(ur)
+		l.svcCtx.Engine.Where("id = ? AND enable = ? AND deleted = ?", vdList[i].AuthorId, true, false).Get(ur)
 		listResp[i] = new(video.Video)
 		listResp[i].Id = vdList[i].Id
 		listResp[i].Title = vdList[i].Title
@@ -73,7 +73,7 @@ func (l *GetVideoLogic) GetVideo(in *video.FeedRequest) (*video.FeedResponse, er
 		listResp[i].Author.Avatar = ur.Avatar
 		listResp[i].Author.BackgroundImage = ur.BackgroundImage
 		listResp[i].Author.Signature = ur.Signature
-		has, _ = l.svcCtx.Engine.Where("user_id = ? AND fan_id = ?", ur.Id, uc.Id).Get(new(models2.Follow))
+		has, _ := l.svcCtx.Engine.Where("user_id = ? AND fan_id = ?", ur.Id, uc.Id).Get(new(models2.Follow))
 		if has {
 			listResp[i].Author.IsFollow = true
 		} else {
