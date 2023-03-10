@@ -2,9 +2,8 @@ package logic
 
 import (
 	"context"
-	// "fmt"
 
-	//"took/user/model"
+	"took/user/model"
 	"took/user/rpc/internal/svc"
 	"took/user/rpc/types/user"
 
@@ -30,8 +29,13 @@ func (l *GetFollowerListLogic) GetFollowerList(in *user.FollowerListReq) (*user.
 	l.svcCtx.Engine.Table("user").Join("LEFT", "follow", "user.id = follow.fan_id").Select(
 		"user.*").Where("follow.user_id = ?", in.UserId).Find(&followerList)
 
-	// println("<============>")
-	// fmt.Printf("%#v", followerList)
+	for i := range followerList {
+		isFollow, _ := l.svcCtx.Engine.Exist(&model.Follow{
+			UserId: followerList[i].Id,
+			FanId: in.UserId,
+		})
+		followerList[i].IsFollow = isFollow
+	}
 
 	return &user.FollowerListResp{
 		StatusCode: 0,

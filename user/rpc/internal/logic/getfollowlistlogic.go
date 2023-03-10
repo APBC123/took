@@ -28,6 +28,10 @@ func (l *GetFollowListLogic) GetFollowList(in *user.FollowListReq) (*user.Follow
 	l.svcCtx.Engine.Table("user").Join("LEFT", "follow", "user.id = follow.user_id").Select(
 		"user.*").Where("follow.fan_id = ?", in.UserId).Find(&followerList)
 
+	for i := range followerList {
+		followerList[i].IsFollow = true
+	}
+
 	return &user.FollowListResp{
 		StatusCode: 0,
 		StatusMsg: "success",

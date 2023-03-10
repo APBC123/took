@@ -30,8 +30,9 @@ func (l *GetFriendListLogic) GetFriendList(in *user.FriendListReq) (*user.Friend
 		"INNER", []string{"follow", "f2"}, "f1.user_id = f2.fan_id").Select("u.*").Where(
 		"f1.fan_id = ? AND f1.fan_id = f2.user_id", in.UserId).Find(&friendList)
 
-	// fmt.Println("<===============>")
-	// fmt.Print(friendList)
+	for i := range friendList {
+		friendList[i].IsFollow = true
+	}
 
 	return &user.FriendListResp{
 		StatusCode: 0,
