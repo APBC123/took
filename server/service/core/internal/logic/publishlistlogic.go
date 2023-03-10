@@ -32,20 +32,10 @@ func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *typ
 	if err != nil {
 		return nil, err
 	}
-	list := publishList.VideoList
+
 	resp = new(types.PublishListResponse)
 	resp.StatusMsg = publishList.StatusMsg
 	resp.StatusCode = publishList.StatusCode
-	resp.VideoList = make([]types.Video, len(list))
-	for i := range list {
-		resp.VideoList[i].Author = helper.NewUser(list[i].Author)
-		resp.VideoList[i].IsFavorite = list[i].IsFavorite
-		resp.VideoList[i].Id = list[i].Id
-		resp.VideoList[i].Title = list[i].Title
-		resp.VideoList[i].CoverUrl = list[i].CoverUrl
-		resp.VideoList[i].PlayUrl = list[i].PlayUrl
-		resp.VideoList[i].FavoriteCount = list[i].FavoriteCount
-		resp.VideoList[i].CommentCount = list[i].CommentCount
-	}
+	resp.VideoList = helper.NewVideoList(publishList.VideoList)
 	return resp, nil
 }

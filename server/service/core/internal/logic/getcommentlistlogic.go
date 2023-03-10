@@ -32,17 +32,9 @@ func (l *GetCommentListLogic) GetCommentList(req *types.CommentListRequest) (res
 	if err != nil {
 		return nil, err
 	}
+
 	resp = new(types.CommentListResponse)
-
-	list := commentList.CommentList
-	resp.CommentList = make([]types.Comment, len(list))
-	for i := range resp.CommentList {
-		resp.CommentList[i].Id = list[i].Id
-		resp.CommentList[i].Content = list[i].Content
-		resp.CommentList[i].CreateDate = list[i].CreateDate
-		resp.CommentList[i].User = helper.NewUser(list[i].User)
-
-	}
+	resp.CommentList = helper.NewCommentList(commentList.CommentList)
 	resp.StatusMsg = commentList.StatusMsg
 	resp.StatusCode = commentList.StatusCode
 	return resp, nil

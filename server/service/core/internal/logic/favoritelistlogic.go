@@ -33,20 +33,10 @@ func (l *FavoriteListLogic) FavoriteList(req *types.FavoriteListRequest) (resp *
 	if err != nil {
 		return nil, err
 	}
+
 	resp = new(types.FavoriteListResponse)
-	resp.VideoList = make([]types.Video, len(favoriteList.VideoList))
-	for i := range resp.VideoList {
-		resp.VideoList[i].IsFavorite = favoriteList.VideoList[i].IsFavorite
-		resp.VideoList[i].Id = favoriteList.VideoList[i].Id
-		resp.VideoList[i].Title = favoriteList.VideoList[i].Title
-		resp.VideoList[i].PlayUrl = favoriteList.VideoList[i].PlayUrl
-		resp.VideoList[i].CoverUrl = favoriteList.VideoList[i].CoverUrl
-		resp.VideoList[i].CommentCount = favoriteList.VideoList[i].CommentCount
-		resp.VideoList[i].FavoriteCount = favoriteList.VideoList[i].FavoriteCount
-		resp.VideoList[i].Author = helper.NewUser(favoriteList.VideoList[i].Author)
-	}
+	resp.VideoList = helper.NewVideoList(favoriteList.VideoList)
 	resp.StatusCode = 0
 	resp.StatusMsg = ""
-
 	return resp, nil
 }

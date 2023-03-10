@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 	"crypto/md5"
-	"time"
 	"fmt"
+	"time"
 
 	"took/user/model"
 	"took/user/rpc/internal/svc"
@@ -35,21 +35,21 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 	if !has {
 		return &user.LoginResp{
 			StatusCode: 2,
-			StatusMsg: "用户名或密码错误",
+			StatusMsg:  "用户名或密码错误",
 		}, nil
 	}
-	
+
 	if usr.Enable == 0 {
 		return &user.LoginResp{
 			StatusCode: 6,
-			StatusMsg: "该帐号封禁中...",
+			StatusMsg:  "该帐号封禁中...",
 		}, nil
 	}
 
 	if usr.Deleted == 1 {
 		return &user.LoginResp{
 			StatusCode: 6,
-			StatusMsg: "该帐号已注销",
+			StatusMsg:  "该帐号已注销",
 		}, nil
 	}
 
@@ -59,7 +59,7 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 
 	return &user.LoginResp{
 		StatusCode: 0,
-		StatusMsg: "登录成功",
-		UserId: usr.Id,
+		StatusMsg:  "登录成功",
+		UserId:     usr.Id,
 	}, nil
 }

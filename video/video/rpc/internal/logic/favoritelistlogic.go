@@ -69,7 +69,7 @@ func (l *FavoriteListLogic) FavoriteList(in *video.FavoriteListRequest) (*video.
 		resp.VideoList[i].Author.TotalFavorited, _ = l.svcCtx.Engine.Where("author_id = ? AND deleted = ? AND removed = ?", ur.Id, false, false).SumInt(vd, "favorite_count") //获赞总数
 		resp.VideoList[i].Author.WorkCount, _ = l.svcCtx.Engine.Where("author_id = ? AND deleted = ? AND removed = ?", ur.Id, false, false).Count(new(models2.Video))         //作品数
 		resp.VideoList[i].Author.FavoriteCount, _ = l.svcCtx.Engine.Where("user_id = ? AND deleted = ? AND removed = ?", ur.Id, false, false).Count(new(models2.Favorite))    //喜欢数
-		has, _ := l.svcCtx.Engine.Where("user_id = ? AND fan_id = ? AND deleted = ? AND removed = ?", ur.Id, in.UserId, false, false).Get(new(models2.Follow))
+		has, _ := l.svcCtx.Engine.Where("user_id = ? AND fan_id = ? AND deleted = ?", ur.Id, in.UserId).Get(new(models2.Follow))
 		if has {
 			resp.VideoList[i].Author.IsFollow = true
 		} else {
