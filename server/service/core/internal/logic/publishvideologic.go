@@ -30,7 +30,6 @@ func (l *PublishVideoLogic) PublishVideo(req *types.PublishRequest) (resp *types
 	if err != nil {
 		return nil, err
 	}
-
 	//插入上传记录，上传已在handler层中完成
 	vd := &models.Video{
 		AuthorId:      uc.Id,

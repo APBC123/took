@@ -32,22 +32,11 @@ func (l *GetVideoLogic) GetVideo(req *types.FeedRequest) (resp *types.FeedRespon
 	if err != nil {
 		return nil, err
 	}
-	list := videoFeed.VideoList
+
 	resp = new(types.FeedResponse)
 	resp.StatusMsg = videoFeed.StatusMsg
 	resp.StatusCode = videoFeed.StatusCode
 	resp.NextTime = videoFeed.NextTime
-	resp.VideoList = make([]types.Video, len(list))
-	for i := range resp.VideoList {
-		resp.VideoList[i].Id = list[i].Id
-		resp.VideoList[i].PlayUrl = list[i].PlayUrl
-		resp.VideoList[i].CoverUrl = list[i].CoverUrl
-		resp.VideoList[i].Title = list[i].Title
-		resp.VideoList[i].FavoriteCount = list[i].FavoriteCount
-		resp.VideoList[i].CommentCount = list[i].CommentCount
-		resp.VideoList[i].IsFavorite = list[i].IsFavorite
-		resp.VideoList[i].Author = helper.NewUser(list[i].Author)
-	}
-
+	resp.VideoList = helper.NewVideoList(videoFeed.VideoList)
 	return resp, nil
 }
