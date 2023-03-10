@@ -26,7 +26,7 @@ func NewGetFollowListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 }
 
 func (l *GetFollowListLogic) GetFollowList(req *types.FollowListReq) (resp *types.FollowListResp, err error) {
-	_, err = helper.AnalyzeToken(req.Token, l.svcCtx.Config.JwtAuth.SecretKey)
+	uc, err := helper.AnalyzeToken(req.Token, l.svcCtx.Config.JwtAuth.SecretKey)
 	if err != nil {
 		return &types.FollowListResp{
 			StatusCode: 3,
@@ -35,7 +35,8 @@ func (l *GetFollowListLogic) GetFollowList(req *types.FollowListReq) (resp *type
 	}
 
 	rpcResp, _ := l.svcCtx.UserRpc.GetFollowList(l.ctx, &user.FollowListReq{
-		UserId: req.UserId,
+		UserId: uc.Id,
+		ToUserId: req.UserId,
 	})
 
 	return &types.FollowListResp{

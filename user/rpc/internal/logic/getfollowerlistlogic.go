@@ -27,7 +27,7 @@ func NewGetFollowerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 func (l *GetFollowerListLogic) GetFollowerList(in *user.FollowerListReq) (*user.FollowerListResp, error) {
 	var followerList []*user.User
 	l.svcCtx.Engine.Table("user").Join("LEFT", "follow", "user.id = follow.fan_id").Select(
-		"user.*").Where("follow.user_id = ?", in.UserId).Find(&followerList)
+		"user.*").Where("follow.user_id = ?", in.ToUserId).Find(&followerList)
 
 	for i := range followerList {
 		isFollow, _ := l.svcCtx.Engine.Exist(&model.Follow{
