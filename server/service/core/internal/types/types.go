@@ -18,17 +18,102 @@ type Video struct {
 }
 
 type User struct {
-	Id              int64  `json:"id,omitempty"`
-	Username        string `json:"name,omitempty"`
-	FollowCount     int64  `json:"follow_count"`
-	FollowerCount   int64  `json:"follower_count"`
+	Id              int64  `json:"id"`
+	Username        string `json:"name"`
+	FollowCount     int64  `json:"follow_count,omitempty"`
+	FollowerCount   int64  `json:"follower_count,omitempty"`
 	IsFollow        bool   `json:"is_follow"`
 	Avatar          string `json:"avatar,omitempty"`
 	BackgroundImage string `json:"background_image,omitempty"`
 	Signature       string `json:"signature,omitempty"`
-	TotalFavorited  int64  `json:"total_favorited"`
-	WorkCount       int64  `json:"work_count"`
-	FavoriteCount   int64  `json:"favorite_count"`
+	TotalFavorited  int64  `json:"total_favorited,omitempty"`
+	WorkCount       int64  `json:"work_count,omitempty"`
+	FavoriteCount   int64  `json:"favorite_count,omitempty"`
+}
+
+type FriendUser struct {
+	User
+	Message string `json:"message,omitempty"`
+	MsgType int64  `json:"msgType"`
+}
+
+type RegisterReq struct {
+	Username string `form:"username"`
+	Password string `form:"password"`
+}
+
+type RegisterResp struct {
+	StatusCode int32  `json:"status_code"`
+	StatusMsg  string `json:"status_msg,omitempty"`
+	UserId     int64  `json:"user_id"`
+	Token      string `json:"token"`
+}
+
+type LoginReq struct {
+	Username string `form:"username"`
+	Password string `form:"password"`
+}
+
+type LoginResp struct {
+	StatusCode int32  `json:"status_code"`
+	StatusMsg  string `json:"status_msg,omitempty"`
+	UserId     int64  `json:"user_id"`
+	Token      string `json:"token"`
+}
+
+type UserInfoReq struct {
+	UserId int64  `form:"user_id"`
+	Token  string `form:"token"`
+}
+
+type UserInfoResp struct {
+	StatusCode int32  `json:"status_code"`
+	StatusMsg  string `json:"status_msg,omitempty"`
+	User       User   `json:"user"`
+}
+
+type FollowReq struct {
+	Token      string `form:"token"`
+	ToUserId   int64  `form:"to_user_id"`
+	ActionType int32  `form:"action_type"`
+}
+
+type FollowResp struct {
+	StatusCode int32  `json:"status_code"`
+	StatusMsg  string `json:"status_msg,omitempty"`
+}
+
+type FollowListReq struct {
+	UserId int64  `form:"user_id"`
+	Token  string `form:"token"`
+}
+
+type FollowListResp struct {
+	StatusCode int32  `json:"status_code"`
+	StatusMsg  string `json:"status_msg,omitempty"`
+	UserList   []User `json:"user_list"`
+}
+
+type FollowerListReq struct {
+	UserId int64  `form:"user_id"`
+	Token  string `form:"token"`
+}
+
+type FollowerListResp struct {
+	StatusCode int32  `json:"status_code"`
+	StatusMsg  string `json:"status_msg,omitempty"`
+	UserList   []User `json:"user_list"`
+}
+
+type FriendListReq struct {
+	UserId int64  `form:"user_id"`
+	Token  string `form:"token"`
+}
+
+type FriendListResp struct {
+	StatusCode int32  `json:"status_code"`
+	StatusMsg  string `json:"status_msg,omitempty"`
+	UserList   []User `json:"user_list"`
 }
 
 type FeedResponse struct {

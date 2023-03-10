@@ -25,6 +25,13 @@ func NewFollowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FollowLogi
 }
 
 func (l *FollowLogic) Follow(in *user.FollowReq) (*user.FollowResp, error) {
+	if in.UserId == in.ToUserId {
+		return &user.FollowResp{
+			StatusCode: 7,
+			StatusMsg: "无法关注自己",
+		}, nil
+	}
+
 	isFollow, _ := l.svcCtx.Engine.Exist(&model.Follow{
 		FanId: in.UserId,
 		UserId: in.ToUserId,
@@ -41,17 +48,27 @@ func (l *FollowLogic) Follow(in *user.FollowReq) (*user.FollowResp, error) {
 		}, nil
 	}
 
+	var fromUser, toUser model.User
+	l.svcCtx.Engine.ID(in.UserId).Cols("follow_count", "follower_count").Get(&fromUser)
+	l.svcCtx.Engine.ID(in.ToUserId).Cols("follow_count", "follower_count").Get(&toUser)
+
 	resp := user.FollowResp{}
 	if in.ActionType == 1 {
 		l.svcCtx.Engine.Insert(&model.Follow{
 			FanId: in.UserId,
 			UserId: in.ToUserId,
 		})
+		fromUser.FollowCount++
+		toUser.FollowerCount++
 		resp.StatusMsg = "关注成功"
 	} else {
 		l.svcCtx.Engine.Table("follow").Where("user_id = ? AND fan_id = ?", in.ToUserId, in.UserId).Delete()
+		fromUser.FollowCount--
+		toUser.FollowerCount--
 		resp.StatusMsg = "取消关注成功"
 	}
+	l.svcCtx.Engine.ID(in.UserId).Cols("follow_count", "follower_count").Update(fromUser)
+	l.svcCtx.Engine.ID(in.ToUserId).Cols("follow_count", "follower_count").Update(toUser)
 
 	return &resp, nil
 }

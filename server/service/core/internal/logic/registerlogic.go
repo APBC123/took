@@ -5,10 +5,10 @@ import (
 	"errors"
 	"strings"
 
-	"took/user/api/internal/helper"
-	"took/user/api/internal/svc"
-	"took/user/api/internal/types"
 	"took/user/rpc/types/user"
+	"took/server/service/core/helper"
+	"took/server/service/core/internal/svc"
+	"took/server/service/core/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
