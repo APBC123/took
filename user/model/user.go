@@ -6,8 +6,8 @@ type User struct {
 	Id              int64     `xorm:"pk autoincr 'id'"`
 	Username        string    `xorm:"notnull 'username'"`
 	Password        string    `xorm:"notnull 'password'"`
-	Enable          int64     `xorm:"default 1 'enable'"`                       // 账号是否可用
-	Deleted         int64     `xorm:"'deleted'"`                      // 账号删除(注销)标志位
+	Enable          bool     `xorm:"default 1 'enable'"`              // 账号是否可用
+	Deleted         bool     `xorm:"'deleted'"`                       // 账号删除(注销)标志位
 	LoginTime       time.Time `xorm:"datetime 'login_time'"`          // 最近一次登录的时间
 	CreateTime      time.Time `xorm:"datetime created 'create_time'"` // 注册时间
 	FollowCount     int64     `xorm:"'follow_count'"`                 // 关注数
