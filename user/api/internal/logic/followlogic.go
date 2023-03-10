@@ -39,12 +39,6 @@ func (l *FollowLogic) Follow(req *types.FollowReq) (resp *types.FollowResp, err 
 		ToUserId: req.ToUserId,
 		ActionType: req.ActionType,
 	})
-	if rpcResp.StatusCode != 0 {
-		return &types.FollowResp{
-			StatusCode: rpcResp.StatusCode,
-			StatusMsg: rpcResp.StatusMsg,
-		}, nil
-	}
 
 	return &types.FollowResp{
 		StatusCode: rpcResp.StatusCode,
