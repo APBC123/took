@@ -69,7 +69,7 @@ func (l *GetCommentListLogic) GetCommentList(in *video.CommentListRequest) (*vid
 		ur[i].Avatar = user.Avatar
 		ur[i].BackgroundImage = user.BackgroundImage
 		ur[i].Signature = user.Signature
-		has, _ = l.svcCtx.Engine.Where("user_id = ? AND fan_id = ? AND deleted = ? AND removed = ?", authorId, user.Id, false, false).Get(new(models2.Follow))
+		has, _ = l.svcCtx.Engine.Where("user_id = ? AND fan_id = ?", authorId, user.Id).Get(new(models2.Follow))
 		if has {
 			ur[i].IsFollow = true
 		} else {
