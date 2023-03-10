@@ -43,7 +43,10 @@ func (l *PublishVideoLogic) PublishVideo(req *types.PublishRequest) (resp *types
 	if err != nil {
 		return nil, err
 	}
-
+	_, err = l.svcCtx.Engine.Exec("update user set work_count=work_count+1 where id=?", uc.Id)
+	if err != nil {
+		return nil, err
+	}
 	resp.StatusCode = 0
 	resp.StatusMsg = "上传成功"
 

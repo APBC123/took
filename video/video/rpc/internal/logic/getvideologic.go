@@ -73,7 +73,7 @@ func (l *GetVideoLogic) GetVideo(in *video.FeedRequest) (*video.FeedResponse, er
 		listResp[i].Author.Avatar = ur.Avatar
 		listResp[i].Author.BackgroundImage = ur.BackgroundImage
 		listResp[i].Author.Signature = ur.Signature
-		has, _ = l.svcCtx.Engine.Where("user_id = ? AND fan_id = ? AND deleted = ? AND removed = ?", ur.Id, uc.Id, false, false).Get(new(models2.Follow))
+		has, _ = l.svcCtx.Engine.Where("user_id = ? AND fan_id = ?", ur.Id, uc.Id).Get(new(models2.Follow))
 		if has {
 			listResp[i].Author.IsFollow = true
 		} else {

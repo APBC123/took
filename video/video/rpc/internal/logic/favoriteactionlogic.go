@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"took/video/helper"
 	models2 "took/video/models"
 	"took/video/video/rpc/internal/svc"
@@ -40,6 +41,19 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 		if err != nil {
 			return nil, err
 		}
+		vd := new(models2.Video)
+		_, err = l.svcCtx.Engine.Where("id = ?", in.VideoId).Get(vd)
+		if err != nil {
+			return nil, err
+		}
+		_, err = l.svcCtx.Engine.Exec("update user set favorite_count = favorite_count-1 where id = ? and enable = ? and deleted = ?", uc.Id, true, false)
+		if err != nil {
+			return nil, err
+		}
+		_, err = l.svcCtx.Engine.Exec("update user set total_favorited = total_favorited-1 where id = ? and enable = ? and deleted = ?", vd.AuthorId, true, false)
+		if err != nil {
+			return nil, err
+		}
 		resp.StatusCode = 0
 		resp.StatusMsg = "点赞取消"
 	}
@@ -47,14 +61,27 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 	if in.ActionType == 1 {
 		favoriteRecord := new(models2.Favorite)
 		favoriteRecord.VideoId = in.VideoId
-		favoriteRecord.UserId = 1
+		favoriteRecord.UserId = uc.Id
 		_, err = l.svcCtx.Engine.Insert(favoriteRecord)
 		if err != nil {
-			return nil, err
+			return nil, errors.New("1")
 		}
 		_, err = l.svcCtx.Engine.Exec("update video set favorite_count = favorite_count+1 where id = ? and removed = ? and deleted = ?", in.VideoId, false, false)
 		if err != nil {
+			return nil, errors.New("2")
+		}
+		vd := new(models2.Video)
+		_, err = l.svcCtx.Engine.Where("id = ?", in.VideoId).Get(vd)
+		if err != nil {
 			return nil, err
+		}
+		_, err = l.svcCtx.Engine.Exec("update user set favorite_count = favorite_count+1 where id = ? and enable = ? and deleted = ?", uc.Id, true, false)
+		if err != nil {
+			return nil, errors.New("3")
+		}
+		_, err = l.svcCtx.Engine.Exec("update user set total_favorited = total_favorited+1 where id = ? and enable = ? and deleted = ?", vd.AuthorId, true, false)
+		if err != nil {
+			return nil, errors.New("4")
 		}
 		resp.StatusMsg = "点赞成功"
 		resp.StatusCode = 0

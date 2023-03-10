@@ -74,7 +74,7 @@ func (l *PublishListLogic) PublishList(in *video.PublishListRequest) (*video.Pub
 		vdList[i].FavoriteCount = vd[i].FavoriteCount
 		vdList[i].CoverUrl = vd[i].CoverUrl
 		vdList[i].PlayUrl = vd[i].PlayUrl
-		has, _ = l.svcCtx.Engine.Where("video_id = ? AND user_id = ?", vdList[i].Id, ur.Id).Get(new(models2.Favorite))
+		has, _ = l.svcCtx.Engine.Where("video_id = ? AND user_id = ? AND removed = ? AND deleted = ?", vdList[i].Id, ur.Id, false, false).Get(new(models2.Favorite))
 		if has {
 			vdList[i].IsFavorite = true
 		} else {
