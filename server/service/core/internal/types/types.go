@@ -124,7 +124,7 @@ type FeedResponse struct {
 
 type FeedRequest struct {
 	LatestTime int64  `json:"latest_time,optional"`
-	Token      string `json:"token,optional"`
+	Token      string `form:"token,optional"`
 }
 
 type PublishRequest struct {
