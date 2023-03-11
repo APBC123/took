@@ -32,7 +32,7 @@ func (l *GetVideoLogic) GetVideo(req *types.FeedRequest) (resp *types.FeedRespon
 	if err != nil {
 		return nil, err
 	}
-
+	
 	resp = new(types.FeedResponse)
 	resp.StatusMsg = videoFeed.StatusMsg
 	resp.StatusCode = videoFeed.StatusCode

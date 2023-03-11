@@ -80,6 +80,7 @@ message FollowResp {
 // 获取关注列表
 message FollowListReq {
     int64 UserId = 1;
+    int64 ToUserId = 2;
 }
 message FollowListResp {
     int32 StatusCode = 1;
@@ -90,6 +91,7 @@ message FollowListResp {
 // 获取粉丝列表
 message FollowerListReq {
     int64 UserId = 1;
+    int64 ToUserId = 2;
 }
 message FollowerListResp {
     int32 StatusCode = 1;
@@ -100,12 +102,13 @@ message FollowerListResp {
 // 获取好友列表
 message FriendListReq {
     int64 UserId = 1;
+    int64 ToUserId = 2;
 }
 
 message FriendListResp {
     int32 StatusCode = 1;
     string StatusMsg = 2;
-    repeated User UserList = 3;
+    repeated FriendUser UserList = 3;
 }
 
 service UserService { 

@@ -31,9 +31,19 @@ type User {
 }
 
 type FriendUser {
-	User
-	Message string `json:"message,omitempty"`
-	MsgType int64  `json:"msgType"`
+	Id              int64  `json:"id"`
+	Username        string `json:"name"`
+	FollowCount     int64  `json:"follow_count,omitempty"`
+	FollowerCount   int64  `json:"follower_count,omitempty"`
+	IsFollow        bool   `json:"is_follow"`
+	Avatar          string `json:"avatar,omitempty"`
+	BackgroundImage string `json:"background_image,omitempty"`
+	Signature       string `json:"signature,omitempty"`
+	TotalFavorited  int64  `json:"total_favorited,omitempty"`
+	WorkCount       int64  `json:"work_count,omitempty"`
+	FavoriteCount   int64  `json:"favorite_count,omitempty"`
+	Message         string `json:"message,omitempty"`
+	MsgType         int64  `json:"msgType"`
 }
 
 // 用户注册
@@ -130,9 +140,9 @@ type (
 	}
 
 	FriendListResp {
-		StatusCode int32  `json:"status_code"`
-		StatusMsg  string `json:"status_msg,omitempty"`
-		UserList   []User `json:"user_list"`
+		StatusCode int32        `json:"status_code"`
+		StatusMsg  string       `json:"status_msg,omitempty"`
+		UserList   []FriendUser `json:"user_list"`
 	}
 )
 

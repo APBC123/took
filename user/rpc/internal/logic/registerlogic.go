@@ -3,7 +3,12 @@ package logic
 import (
 	"context"
 	"crypto/md5"
+	"encoding/json"
 	"fmt"
+	"io"
+	"math/rand"
+	"net/http"
+	"time"
 
 	"took/user/model"
 	"took/user/rpc/internal/svc"
@@ -33,24 +38,44 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 	if has {
 		return &user.RegisterResp{
 			StatusCode: 1,
-			StatusMsg: "用户名已存在",
+			StatusMsg:  "用户名已存在",
 		}, nil
 	}
 
-	usr := model.User {
-		Username: in.Username,
-		Password: fmt.Sprintf("%x", md5.Sum([]byte(in.Password))), // 哈希加密
-		Avatar: "https://pannta-picture.oss-cn-shenzhen.aliyuncs.com/20230308051013.jpg",
-		BackgroundImage: "https://vip1.loli.io/2022/05/11/Nd4lgGtMrFpa8PW.jpg",
-		Signature: "爱好是吃蛋挞",
+	// 随机生成用户头像、首页背景、个性签名
+	var text struct {
+		Code    string `json:"code"`
+		Type    string `json:"type"`
+		Content string `json:"content"`
+	}
+	for {
+		resp, err := http.Get("https://api.uixsj.cn/hitokoto/get?type=hitokoto&code=json")
+		if err != nil {
+			return nil, err
+		}
+		defer resp.Body.Close()
+		body, _ := io.ReadAll(resp.Body)
+
+		json.Unmarshal(body, &text)
+		if len(text.Content) < 90 { 
+			break;
+		}
+		time.Sleep(30*time.Millisecond)
+	}
+	usr := model.User{
+		Username:        in.Username,
+		Password:        fmt.Sprintf("%x", md5.Sum([]byte(in.Password))), // 哈希加密
+		Avatar:          "https://www.loliapi.com/acg/pp?id=" + fmt.Sprint(rand.Intn(210)),
+		BackgroundImage: "https://www.loliapi.com/acg/pc/?id=" + fmt.Sprint(rand.Intn(700)),
+		Signature:       text.Content,
 	}
 
 	l.svcCtx.Engine.Cols("username", "password", "avatar", "background_image",
-	 "signature").Insert(&usr)
+		"signature").Insert(&usr)
 
 	return &user.RegisterResp{
 		StatusCode: 0,
-		StatusMsg: "注册成功",
-		UserId: usr.Id,
+		StatusMsg:  "注册成功",
+		UserId:     usr.Id,
 	}, nil
 }

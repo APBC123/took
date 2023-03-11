@@ -26,7 +26,7 @@ func NewGetFriendListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 }
 
 func (l *GetFriendListLogic) GetFriendList(req *types.FriendListReq) (resp *types.FriendListResp, err error) {
-	_, err = helper.AnalyzeToken(req.Token, l.svcCtx.Config.JwtAuth.SecretKey)
+	uc, err := helper.AnalyzeToken(req.Token, l.svcCtx.Config.JwtAuth.SecretKey)
 	if err != nil {
 		return &types.FriendListResp{
 			StatusCode: 3,
@@ -35,12 +35,13 @@ func (l *GetFriendListLogic) GetFriendList(req *types.FriendListReq) (resp *type
 	}
 
 	rpcResp, _ := l.svcCtx.UserRpc.GetFriendList(l.ctx, &user.FriendListReq{
-		UserId: req.UserId,
+		UserId: uc.Id,
+		ToUserId: req.UserId,
 	})
 
 	return &types.FriendListResp{
 		StatusCode: 0,
 		StatusMsg: "success",
-		UserList: types.NewUserList(rpcResp.UserList),
+		UserList: types.NewFriendUserList(rpcResp.UserList),
 	}, nil
 }
