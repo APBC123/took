@@ -35,6 +35,7 @@ func PublishVideoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			w.Write(ret)
 			return
 		}
+		os.Mkdir("./video", 0777)
 		fv, err := os.OpenFile("./video/"+helper.UUID()+path.Ext(fileHeader.Filename), os.O_CREATE|os.O_RDONLY, 0777)
 		if err != nil {
 			var ret, _ = json.Marshal(&types.PublishResponse{Response: types.Response(struct {
@@ -50,6 +51,7 @@ func PublishVideoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		wf.Flush()
 		fv.Close()
 		//生成截图
+		os.Mkdir("./cover", 0777)
 		err, filename := helper.GetVideoShot(fv.Name(), "./cover/"+helper.UUID(), 1)
 		if err != nil {
 			var ret, _ = json.Marshal(&types.PublishResponse{Response: types.Response(struct {

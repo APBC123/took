@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"took/chat/rpc/types/chat"
 	"took/server/service/core/internal/types"
 	"took/video/video/rpc/types/video"
 )
@@ -43,6 +44,18 @@ func NewVideoList(video []*video.Video) []types.Video {
 		list[i].CoverUrl = video[i].CoverUrl
 		list[i].PlayUrl = video[i].PlayUrl
 		list[i].Author = NewUser(video[i].Author)
+	}
+	return list
+}
+
+func NewChatMessageList(chatMessage []*chat.Message) []types.Message {
+	list := make([]types.Message, len(chatMessage))
+	for i := range list {
+		list[i].ToUserId = chatMessage[i].ToUserId
+		list[i].Id = chatMessage[i].Id
+		list[i].Content = chatMessage[i].Content
+		list[i].FromUserId = chatMessage[i].FromUserId
+		list[i].CreateTime = chatMessage[i].CreateTime
 	}
 	return list
 }

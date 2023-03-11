@@ -134,7 +134,7 @@ type FeedResponse struct {
 
 type FeedRequest struct {
 	LatestTime int64  `json:"latest_time,optional"`
-	Token      string `json:"token,optional"`
+	Token      string `form:"token,optional"`
 }
 
 type PublishRequest struct {
@@ -206,5 +206,35 @@ type FavoriteActionRequest struct {
 }
 
 type FavoriteActionResponse struct {
+	Response
+}
+
+type Message struct {
+	Id         int64  `json:"id"`
+	ToUserId   int64  `json:"to_user_id"`
+	FromUserId int64  `json:"from_user_id"`
+	CreateTime int64  `json:"create_time"`
+	Content    string `json:"content"`
+}
+
+type ChatMessageRequest struct {
+	Token      string `form:"token"`
+	ToUserId   int64  `form:"to_user_id"`
+	PreMsgTime int64  `form:"pre_msg_time"`
+}
+
+type ChatMessageResponse struct {
+	Response
+	MessageList []Message `json:"message_list"`
+}
+
+type SendChatMessageRequest struct {
+	Token      string `form:"token"`
+	ToUserId   int64  `form:"to_user_id"`
+	ActionType int32  `form:"action_type"`
+	Content    string `form:"content"`
+}
+
+type SendChatMessageResponse struct {
 	Response
 }

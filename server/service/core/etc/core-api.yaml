@@ -8,12 +8,17 @@ VideoRpc:
     Hosts:
       - 127.0.0.1:2379
     Key: video.rpc
-  Timeout: 5000
+  Timeout: 10000
 UserRpc:
   Etcd:
     Hosts:
     - 127.0.0.1:2379
     Key: user.rpc
+ChatRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: chat.rpc
 JwtAuth:
   SecretKey: took
   Duration: 3600

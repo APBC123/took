@@ -8,12 +8,13 @@ import (
 type Config struct {
 	rest.RestConf
 	VideoRpc zrpc.RpcClientConf
-	UserRpc zrpc.RpcClientConf
+	UserRpc  zrpc.RpcClientConf
+	ChatRpc  zrpc.RpcClientConf
 	Mysql    struct {
 		DataSource string
 	}
 	JwtAuth struct {
 		SecretKey string
-		Duration int64
+		Duration  int64
 	}
 }

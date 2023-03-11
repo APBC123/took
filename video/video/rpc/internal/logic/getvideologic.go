@@ -50,7 +50,7 @@ func (l *GetVideoLogic) GetVideo(in *video.FeedRequest) (*video.FeedResponse, er
 	}
 	//获取视频列表
 	vdList := make([]*models2.Video, 0)
-	err = l.svcCtx.Engine.Limit(8, int(in.LatestTime)).Desc("id").Find(&vdList) //获取投稿时间最近的8个视频
+	err = l.svcCtx.Engine.Limit(8, int(in.LatestTime)).Desc("id").Where("removed = ? AND deleted = ?", false, false).Find(&vdList) //获取投稿时间最近的8个视频
 	if err != nil {
 		return nil, err
 	}

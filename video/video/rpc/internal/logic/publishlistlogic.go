@@ -28,16 +28,12 @@ func (l *PublishListLogic) PublishList(in *video.PublishListRequest) (*video.Pub
 	//验证Token
 	//
 	resp := new(video.PublishListResponse)
-
+	uc := new(helper.UserClaim)
 	if in.Token != "" {
-		uc, err := helper.AnalyzeToken(in.Token)
+		var err error
+		uc, err = helper.AnalyzeToken(in.Token)
 		if err != nil {
 			return nil, err
-		}
-		if uc.Id != in.UserId {
-			resp.StatusCode = -1
-			resp.StatusMsg = "User doesn't match Token"
-			return resp, nil
 		}
 	}
 
@@ -61,7 +57,19 @@ func (l *PublishListLogic) PublishList(in *video.PublishListRequest) (*video.Pub
 		vdList[i].Author.FollowCount = ur.FollowCount
 		vdList[i].Author.FollowerCount = ur.FollowerCount
 		vdList[i].Author.Username = ur.Username
-		vdList[i].Author.IsFollow = false
+		if in.Token == "" {
+			vdList[i].Author.IsFollow = false
+		} else {
+			has, err = l.svcCtx.Engine.Where("user_id = ? AND fan_id = ?", ur.Id, uc.Id).Get(new(models2.Follow))
+			if err != nil {
+				return nil, err
+			}
+			if has {
+				vdList[i].Author.IsFollow = true
+			} else {
+				vdList[i].Author.IsFollow = false
+			}
+		}
 		vdList[i].Author.Avatar = ur.Avatar
 		vdList[i].Author.BackgroundImage = ur.BackgroundImage
 		vdList[i].Author.Signature = ur.Signature
@@ -74,7 +82,7 @@ func (l *PublishListLogic) PublishList(in *video.PublishListRequest) (*video.Pub
 		vdList[i].FavoriteCount = vd[i].FavoriteCount
 		vdList[i].CoverUrl = vd[i].CoverUrl
 		vdList[i].PlayUrl = vd[i].PlayUrl
-		has, _ = l.svcCtx.Engine.Where("video_id = ? AND user_id = ? AND removed = ? AND deleted = ?", vdList[i].Id, ur.Id, false, false).Get(new(models2.Favorite))
+		has, _ = l.svcCtx.Engine.Where("video_id = ? AND user_id = ? AND removed = ? AND deleted = ?", vdList[i].Id, uc.Id, false, false).Get(new(models2.Favorite))
 		if has {
 			vdList[i].IsFavorite = true
 		} else {

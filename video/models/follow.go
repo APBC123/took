@@ -1,7 +1,6 @@
 package models
 
 type Follow struct {
-	Id     int
 	UserId int64
 	FanId  int64
 }
