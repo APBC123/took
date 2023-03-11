@@ -47,6 +47,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/douyin/favorite/action",
 				Handler: FavoriteActionHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/douyin/message/chat",
+				Handler: GetChatMessageHandler(serverCtx),
+			},
 		},
 	)
 

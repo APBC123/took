@@ -110,6 +110,7 @@ message FavoriteActionResponse {
   int32 StatusCode = 1;
   string StatusMsg = 2;
 }
+
 service VideoService {
   rpc GetVideo(FeedRequest) returns(FeedResponse);
 

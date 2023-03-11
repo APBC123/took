@@ -1,0 +1,8 @@
+Name: chat.rpc
+ListenOn: 0.0.0.0:8082
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: chat.rpc
+Mysql:
+  DataSource: root:wang991102@tcp(127.0.0.1)/zijie?charset=utf8mb4&parseTime=True&loc=Local

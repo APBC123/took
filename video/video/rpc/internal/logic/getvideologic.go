@@ -54,7 +54,7 @@ func (l *GetVideoLogic) GetVideo(in *video.FeedRequest) (*video.FeedResponse, er
 	if err != nil {
 		return nil, err
 	}
-	listResp := make([]*video.Video, 8)
+	listResp := make([]*video.Video, len(vdList))
 	for i := range vdList {
 		ur := new(models2.User)
 		has, _ := l.svcCtx.Engine.Where("id = ? AND enable = ? AND deleted = ?", vdList[i].AuthorId, true, false).Get(ur)

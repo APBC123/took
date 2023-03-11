@@ -39,14 +39,14 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 		}, nil
 	}
 
-	if usr.Enable == 0 {
+	if usr.Enable == false {
 		return &user.LoginResp{
 			StatusCode: 6,
 			StatusMsg:  "该帐号封禁中...",
 		}, nil
 	}
 
-	if usr.Deleted == 1 {
+	if usr.Deleted == true {
 		return &user.LoginResp{
 			StatusCode: 6,
 			StatusMsg:  "该帐号已注销",

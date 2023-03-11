@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package chat;
+
+option go_package = "./chat";
+
+message Message {
+  int64 Id = 1;
+  int64 ToUserId = 2;
+  int64 FromUserId = 3;
+  string CreateTime = 4;
+  string Content = 5;
+}
+
+message ChatMessageRequest {
+  string Token = 1;
+  int64 ToUserId = 2;
+}
+
+message ChatMessageResponse {
+  int32 StatusCode = 1;
+  string StatusMsg = 2;
+  repeated Message MessageList = 3;
+}
+
+service ChatService {
+  rpc GetChatMessage(ChatMessageRequest) returns(ChatMessageResponse);
+}
