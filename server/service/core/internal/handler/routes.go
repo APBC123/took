@@ -52,6 +52,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/douyin/message/chat",
 				Handler: GetChatMessageHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/douyin/message/action",
+				Handler: SendChatMessageHandler(serverCtx),
+			},
 		},
 	)
 

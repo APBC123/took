@@ -8,13 +8,14 @@ message Message {
   int64 Id = 1;
   int64 ToUserId = 2;
   int64 FromUserId = 3;
-  string CreateTime = 4;
+  int64 CreateTime = 4;
   string Content = 5;
 }
 
 message ChatMessageRequest {
   string Token = 1;
   int64 ToUserId = 2;
+  int64 PreMsgTime = 3;
 }
 
 message ChatMessageResponse {
@@ -23,6 +24,20 @@ message ChatMessageResponse {
   repeated Message MessageList = 3;
 }
 
+message SendChatMessageRequest {
+  string Token = 1;
+  int64 ToUserId = 2;
+  int32 ActionType = 3;
+  string Content = 4;
+}
+
+message SendChatMessageResponse {
+  string StatusMsg = 1;
+  int32 StatusCode = 2;
+}
+
 service ChatService {
   rpc GetChatMessage(ChatMessageRequest) returns(ChatMessageResponse);
+
+  rpc SendChatMessage(SendChatMessageRequest) returns(SendChatMessageResponse);
 }

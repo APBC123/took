@@ -25,5 +25,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Engine:   models.Init(c.Mysql.DataSource),
 		VideoRpc: videoservice.NewVideoService(zrpc.MustNewClient(c.VideoRpc)),
 		UserRpc:  userservice.NewUserService(zrpc.MustNewClient(c.UserRpc)),
+		ChatRpc:  chatservice.NewChatService(zrpc.MustNewClient(c.ChatRpc)),
 	}
 }

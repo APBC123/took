@@ -13,12 +13,15 @@ import (
 )
 
 type (
-	ChatMessageRequest  = chat.ChatMessageRequest
-	ChatMessageResponse = chat.ChatMessageResponse
-	Message             = chat.Message
+	ChatMessageRequest      = chat.ChatMessageRequest
+	ChatMessageResponse     = chat.ChatMessageResponse
+	Message                 = chat.Message
+	SendChatMessageRequest  = chat.SendChatMessageRequest
+	SendChatMessageResponse = chat.SendChatMessageResponse
 
 	ChatService interface {
 		GetChatMessage(ctx context.Context, in *ChatMessageRequest, opts ...grpc.CallOption) (*ChatMessageResponse, error)
+		SendChatMessage(ctx context.Context, in *SendChatMessageRequest, opts ...grpc.CallOption) (*SendChatMessageResponse, error)
 	}
 
 	defaultChatService struct {
@@ -35,4 +38,9 @@ func NewChatService(cli zrpc.Client) ChatService {
 func (m *defaultChatService) GetChatMessage(ctx context.Context, in *ChatMessageRequest, opts ...grpc.CallOption) (*ChatMessageResponse, error) {
 	client := chat.NewChatServiceClient(m.cli.Conn())
 	return client.GetChatMessage(ctx, in, opts...)
+}
+
+func (m *defaultChatService) SendChatMessage(ctx context.Context, in *SendChatMessageRequest, opts ...grpc.CallOption) (*SendChatMessageResponse, error) {
+	client := chat.NewChatServiceClient(m.cli.Conn())
+	return client.SendChatMessage(ctx, in, opts...)
 }

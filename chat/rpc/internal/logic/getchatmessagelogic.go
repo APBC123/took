@@ -30,10 +30,12 @@ func (l *GetChatMessageLogic) GetChatMessage(in *chat.ChatMessageRequest) (*chat
 		return nil, err
 	}
 	messageList := make([]*chat.Message, 0)
-	err = l.svcCtx.Engine.Where("to_user_id = ?", uc.Id).Find(&messageList)
+	err = l.svcCtx.Engine.Where("(from_user_id = ? AND to_user_id = ? AND create_time > ?) OR (from_user_id = ? AND to_user_id = ? AND create_time > ?)", in.ToUserId, uc.Id, in.PreMsgTime, uc.Id, in.ToUserId, in.PreMsgTime).Find(&messageList)
 	if err != nil {
 		return nil, err
 	}
 	resp.MessageList = messageList
+	resp.StatusMsg = ""
+	resp.StatusCode = 0
 	return resp, nil
 }

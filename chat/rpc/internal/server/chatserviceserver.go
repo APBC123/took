@@ -26,3 +26,8 @@ func (s *ChatServiceServer) GetChatMessage(ctx context.Context, in *chat.ChatMes
 	l := logic.NewGetChatMessageLogic(ctx, s.svcCtx)
 	return l.GetChatMessage(in)
 }
+
+func (s *ChatServiceServer) SendChatMessage(ctx context.Context, in *chat.SendChatMessageRequest) (*chat.SendChatMessageResponse, error) {
+	l := logic.NewSendChatMessageLogic(ctx, s.svcCtx)
+	return l.SendChatMessage(in)
+}
