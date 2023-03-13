@@ -37,6 +37,12 @@ func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*vid
 	if in.ActionType == 2 {
 		ct := new(models2.Comment)
 		ct.Deleted = true
+
+		session := l.svcCtx.Engine.NewSession()
+		defer session.Close()
+		if err = session.Begin(); err != nil {
+			return nil, err
+		}
 		_, err = l.svcCtx.Engine.Where("id = ?", in.CommentId).Cols("deleted").Update(ct)
 		if err != nil {
 			return nil, err
@@ -45,6 +51,10 @@ func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*vid
 		if err != nil {
 			return nil, err
 		}
+		if err = session.Commit(); err != nil {
+			return nil, err
+		}
+
 		resp.Comment = nil
 		resp.StatusMsg = "删除成功"
 		resp.StatusCode = 0
@@ -56,6 +66,12 @@ func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*vid
 		ct.Content = in.CommentText
 		ct.VideoId = in.VideoId
 		ct.CreateTime = time.Now()
+
+		session := l.svcCtx.Engine.NewSession()
+		defer session.Close()
+		if err = session.Begin(); err != nil {
+			return nil, err
+		}
 		_, err = l.svcCtx.Engine.Insert(ct)
 		if err != nil {
 			return nil, err
@@ -64,13 +80,17 @@ func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*vid
 		if err != nil {
 			return nil, err
 		}
+		if err = session.Commit(); err != nil {
+			return nil, err
+		}
+
 		user := new(models2.User)
-		_, err = l.svcCtx.Engine.Where("id = ?", uc.Id).Get(user)
+		_, err = l.svcCtx.Engine.Where("id = ? AND enable = ? AND deleted = ?", uc.Id, true, false).Get(user)
 		if err != nil {
 			return nil, err
 		}
 		vd := new(models2.Video)
-		_, err = l.svcCtx.Engine.Where("id = ?", in.VideoId).Get(vd)
+		_, err = l.svcCtx.Engine.Where("id = ? AND removed = ? AND deleted = ?", in.VideoId, false, false).Get(vd)
 		if err != nil {
 			return nil, err
 		}

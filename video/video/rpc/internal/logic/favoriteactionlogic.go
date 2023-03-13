@@ -33,6 +33,11 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 	resp := new(video.FavoriteActionResponse)
 	//点赞取消
 	if in.ActionType == 2 {
+		session := l.svcCtx.Engine.NewSession()
+		defer session.Close()
+		if err = session.Begin(); err != nil {
+			return nil, err
+		}
 		_, err = l.svcCtx.Engine.Exec("update favorite set removed = true where video_id = ? and user_id = ? and removed = ? and deleted = ?", in.VideoId, uc.Id, false, false)
 		if err != nil {
 			return nil, err
@@ -54,6 +59,10 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 		if err != nil {
 			return nil, err
 		}
+		if err = session.Commit(); err != nil {
+			return nil, err
+		}
+
 		resp.StatusCode = 0
 		resp.StatusMsg = "点赞取消"
 	}
@@ -62,6 +71,12 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 		favoriteRecord := new(models2.Favorite)
 		favoriteRecord.VideoId = in.VideoId
 		favoriteRecord.UserId = uc.Id
+
+		session := l.svcCtx.Engine.NewSession()
+		defer session.Close()
+		if err = session.Begin(); err != nil {
+			return nil, err
+		}
 		_, err = l.svcCtx.Engine.Insert(favoriteRecord)
 		if err != nil {
 			return nil, errors.New("1")
@@ -83,6 +98,10 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 		if err != nil {
 			return nil, errors.New("4")
 		}
+		if err = session.Commit(); err != nil {
+			return nil, err
+		}
+
 		resp.StatusMsg = "点赞成功"
 		resp.StatusCode = 0
 	}
