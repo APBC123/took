@@ -1,7 +1,7 @@
 package models
 
 type Message struct {
-	Id         string
+	Id         string `xorm:"autoincr"`
 	FromUserId int64
 	ToUserId   int64
 	Content    string
