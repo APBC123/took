@@ -13,6 +13,9 @@ type Config struct {
 	Mysql    struct {
 		DataSource string
 	}
+	CacheRedis struct {
+		Addr string
+	}
 	JwtAuth struct {
 		SecretKey string
 		Duration  int64

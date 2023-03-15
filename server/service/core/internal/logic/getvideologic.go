@@ -25,6 +25,7 @@ func NewGetVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetVideo
 }
 
 func (l *GetVideoLogic) GetVideo(req *types.FeedRequest) (resp *types.FeedResponse, err error) {
+	resp = new(types.FeedResponse)
 	videoFeed, err := l.svcCtx.VideoRpc.GetVideo(l.ctx, &video.FeedRequest{
 		LatestTime: req.LatestTime,
 		Token:      req.Token,
@@ -32,11 +33,10 @@ func (l *GetVideoLogic) GetVideo(req *types.FeedRequest) (resp *types.FeedRespon
 	if err != nil {
 		return nil, err
 	}
-	
-	resp = new(types.FeedResponse)
 	resp.StatusMsg = videoFeed.StatusMsg
 	resp.StatusCode = videoFeed.StatusCode
 	resp.NextTime = videoFeed.NextTime
 	resp.VideoList = helper.NewVideoList(videoFeed.VideoList)
+
 	return resp, nil
 }

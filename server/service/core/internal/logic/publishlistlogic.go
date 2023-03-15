@@ -25,6 +25,7 @@ func NewPublishListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Publi
 }
 
 func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *types.PublishListResponse, err error) {
+	resp = new(types.PublishListResponse)
 	publishList, err := l.svcCtx.VideoRpc.PublishList(l.ctx, &video.PublishListRequest{
 		Token:  req.Token,
 		UserId: req.UserId,
@@ -32,10 +33,9 @@ func (l *PublishListLogic) PublishList(req *types.PublishListRequest) (resp *typ
 	if err != nil {
 		return nil, err
 	}
-
-	resp = new(types.PublishListResponse)
 	resp.StatusMsg = publishList.StatusMsg
 	resp.StatusCode = publishList.StatusCode
 	resp.VideoList = helper.NewVideoList(publishList.VideoList)
+
 	return resp, nil
 }

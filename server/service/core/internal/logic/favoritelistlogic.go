@@ -36,7 +36,7 @@ func (l *FavoriteListLogic) FavoriteList(req *types.FavoriteListRequest) (resp *
 
 	resp = new(types.FavoriteListResponse)
 	resp.VideoList = helper.NewVideoList(favoriteList.VideoList)
-	resp.StatusCode = 0
-	resp.StatusMsg = ""
+	resp.StatusCode = favoriteList.StatusCode
+	resp.StatusMsg = favoriteList.StatusMsg
 	return resp, nil
 }

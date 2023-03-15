@@ -115,6 +115,7 @@ func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*vid
 		} else {
 			resp.Comment.User.IsFollow = false
 		}
+
 		resp.StatusCode = 0
 		resp.StatusMsg = "评论成功"
 	}

@@ -1,6 +1,10 @@
 package helper
 
 import (
+	"errors"
+	"github.com/dgrijalva/jwt-go"
+	"math/rand"
+	"time"
 	"took/chat/rpc/types/chat"
 	"took/server/service/core/internal/types"
 	"took/video/video/rpc/types/video"
@@ -58,4 +62,25 @@ func NewChatMessageList(chatMessage []*chat.Message) []types.Message {
 		list[i].CreateTime = chatMessage[i].CreateTime
 	}
 	return list
+}
+
+func Random() int {
+	rand.Seed(time.Now().Unix())
+	return rand.Intn(300)
+}
+
+var JwtKey = "took"
+
+func AnalyzeTokenN(token string) (*UserClaim, error) {
+	uc := new(UserClaim)
+	claims, err := jwt.ParseWithClaims(token, uc, func(token *jwt.Token) (interface{}, error) {
+		return []byte(JwtKey), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if !claims.Valid {
+		return uc, errors.New("token is invalid")
+	}
+	return uc, err
 }

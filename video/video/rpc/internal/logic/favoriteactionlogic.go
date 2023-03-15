@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"errors"
+	"strconv"
 	"took/video/helper"
 	models2 "took/video/models"
 	"took/video/video/rpc/internal/svc"
@@ -32,6 +33,7 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 	}
 	resp := new(video.FavoriteActionResponse)
 	//点赞取消
+	l.svcCtx.RDB.Del(l.ctx, "FavoriteList_UserId:"+strconv.FormatInt(uc.Id, 10))
 	if in.ActionType == 2 {
 		session := l.svcCtx.Engine.NewSession()
 		defer session.Close()

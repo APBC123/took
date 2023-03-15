@@ -39,9 +39,6 @@ func (l *SendChatMessageLogic) SendChatMessage(in *chat.SendChatMessageRequest) 
 			Content:    in.Content,
 			CreateTime: time.Now().Unix(),
 		})
-		if err != nil {
-			return nil, err
-		}
 		resp.StatusMsg = "发送成功"
 		resp.StatusCode = 0
 	} else {
