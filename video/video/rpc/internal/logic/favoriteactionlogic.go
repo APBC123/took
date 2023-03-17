@@ -33,7 +33,6 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 	}
 	resp := new(video.FavoriteActionResponse)
 	//点赞取消
-	l.svcCtx.RDB.Del(l.ctx, "FavoriteList_UserId:"+strconv.FormatInt(uc.Id, 10))
 	if in.ActionType == 2 {
 		session := l.svcCtx.Engine.NewSession()
 		defer session.Close()
@@ -103,9 +102,10 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 		if err = session.Commit(); err != nil {
 			return nil, err
 		}
-
 		resp.StatusMsg = "点赞成功"
 		resp.StatusCode = 0
 	}
+	//删除Redis中对应的缓存
+	l.svcCtx.RDB.Del(l.ctx, "FavoriteList_UserId:"+strconv.FormatInt(uc.Id, 10))
 	return resp, nil
 }
