@@ -1,5 +1,5 @@
 ```text
-启动rpc服务前需要启动etcd
+启动rpc服务前需要启动etcd及Redis
 
 cd video/video/rpc
 
