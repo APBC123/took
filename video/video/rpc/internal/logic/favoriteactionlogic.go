@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"errors"
 	"strconv"
 	"took/video/helper"
 	models2 "took/video/models"
@@ -80,11 +79,11 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 		}
 		_, err = l.svcCtx.Engine.Insert(favoriteRecord)
 		if err != nil {
-			return nil, errors.New("1")
+			return nil, err
 		}
 		_, err = l.svcCtx.Engine.Exec("update video set favorite_count = favorite_count+1 where id = ? and removed = ? and deleted = ?", in.VideoId, false, false)
 		if err != nil {
-			return nil, errors.New("2")
+			return nil, err
 		}
 		vd := new(models2.Video)
 		_, err = l.svcCtx.Engine.Where("id = ? AND removed = ? AND deleted = ?", in.VideoId, false, false).Get(vd)
@@ -93,11 +92,11 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 		}
 		_, err = l.svcCtx.Engine.Exec("update user set favorite_count = favorite_count+1 where id = ? and enable = ? and deleted = ?", uc.Id, true, false)
 		if err != nil {
-			return nil, errors.New("3")
+			return nil, err
 		}
 		_, err = l.svcCtx.Engine.Exec("update user set total_favorited = total_favorited+1 where id = ? and enable = ? and deleted = ?", vd.AuthorId, true, false)
 		if err != nil {
-			return nil, errors.New("4")
+			return nil, err
 		}
 		if err = session.Commit(); err != nil {
 			return nil, err
