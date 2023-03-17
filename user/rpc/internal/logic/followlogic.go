@@ -32,7 +32,7 @@ func (l *FollowLogic) Follow(in *user.FollowReq) (*user.FollowResp, error) {
 		}, nil
 	}
 
-	isFollow, _ := l.svcCtx.Engine.Exist(&model.Follow{
+	isFollow, _ := l.svcCtx.FollowModel.Exist(&model.Follow{
 		FanId: in.UserId,
 		UserId: in.ToUserId,
 	})
@@ -48,13 +48,14 @@ func (l *FollowLogic) Follow(in *user.FollowReq) (*user.FollowResp, error) {
 		}, nil
 	}
 
-	var fromUser, toUser model.User
-	l.svcCtx.Engine.ID(in.UserId).Cols("follow_count", "follower_count").Get(&fromUser)
-	l.svcCtx.Engine.ID(in.ToUserId).Cols("follow_count", "follower_count").Get(&toUser)
+	fromUser := model.User{Id: in.UserId}
+	toUser := model.User{Id: in.ToUserId}
+	l.svcCtx.UserModel.Get(&fromUser)
+	l.svcCtx.UserModel.Get(&toUser)
 
 	resp := user.FollowResp{}
 	if in.ActionType == 1 {
-		l.svcCtx.Engine.Insert(&model.Follow{
+		l.svcCtx.FollowModel.Insert(&model.Follow{
 			FanId: in.UserId,
 			UserId: in.ToUserId,
 		})
@@ -62,13 +63,15 @@ func (l *FollowLogic) Follow(in *user.FollowReq) (*user.FollowResp, error) {
 		toUser.FollowerCount++
 		resp.StatusMsg = "关注成功"
 	} else {
-		l.svcCtx.Engine.Table("follow").Where("user_id = ? AND fan_id = ?", in.ToUserId, in.UserId).Delete()
+		l.svcCtx.FollowModel.Delete(&model.Follow{
+			FanId: in.UserId,
+			UserId: in.ToUserId,
+		})
 		fromUser.FollowCount--
 		toUser.FollowerCount--
 		resp.StatusMsg = "取消关注成功"
 	}
-	l.svcCtx.Engine.ID(in.UserId).Cols("follow_count", "follower_count").Update(fromUser)
-	l.svcCtx.Engine.ID(in.ToUserId).Cols("follow_count", "follower_count").Update(toUser)
-
+	l.svcCtx.UserModel.Update(&fromUser)
+	l.svcCtx.UserModel.Update(&toUser)
 	return &resp, nil
 }

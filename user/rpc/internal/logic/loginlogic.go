@@ -29,9 +29,12 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 
 func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 	hashPwd := fmt.Sprintf("%x", md5.Sum([]byte(in.Password)))
-	var usr model.User
-	has, _ := l.svcCtx.Engine.Where("username=? AND password=?", in.Username, hashPwd).Get(&usr)
+	usr := model.User{
+		Username: in.Username,
+		Password: hashPwd,
+	}
 
+	has, _ := l.svcCtx.UserModel.Get(&usr)
 	if !has {
 		return &user.LoginResp{
 			StatusCode: 2,
@@ -55,7 +58,7 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 
 	// 更新最近登录时间
 	usr.LoginTime = time.Now()
-	l.svcCtx.Engine.ID(usr.Id).Cols("login_time").Update(usr)
+	l.svcCtx.UserModel.Update(&usr)
 
 	return &user.LoginResp{
 		StatusCode: 0,

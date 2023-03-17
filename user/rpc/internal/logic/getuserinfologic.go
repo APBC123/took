@@ -25,8 +25,10 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(in *user.UserInfoReq) (*user.UserInfoResp, error) {
-	var usr model.User;
-	l.svcCtx.Engine.Where("id=?", in.UserId).Get(&usr)
+	usr := model.User{
+		Id: in.UserId,
+	};
+	l.svcCtx.UserModel.Get(&usr)
 
 	// 该接口用于用户本人获取人个信息，用户无法关注自己
 	respUser := user.NewUser(&usr)
