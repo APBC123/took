@@ -48,7 +48,7 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 			return nil, err
 		}
 		vd := new(models2.Video)
-		_, err = l.svcCtx.Engine.Where("id = ?", in.VideoId).Get(vd)
+		_, err = l.svcCtx.Engine.Where("id = ? AND removed = ? AND deleted = ?", in.VideoId, false, false).Get(vd)
 		if err != nil {
 			return nil, err
 		}
@@ -87,7 +87,7 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 			return nil, errors.New("2")
 		}
 		vd := new(models2.Video)
-		_, err = l.svcCtx.Engine.Where("id = ?", in.VideoId).Get(vd)
+		_, err = l.svcCtx.Engine.Where("id = ? AND removed = ? AND deleted = ?", in.VideoId, false, false).Get(vd)
 		if err != nil {
 			return nil, err
 		}
