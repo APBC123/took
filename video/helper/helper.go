@@ -11,6 +11,7 @@ import (
 	"github.com/tencentyun/cos-go-sdk-v5"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 	"log"
+	"math/rand"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -133,4 +134,9 @@ func GetVideoShot(videoPath, videoShotPath string, frameNum int) (error, string)
 		return err, ""
 	}
 	return nil, path.Base(videoShotPath + ".png")
+}
+
+func Random() int {
+	rand.Seed(time.Now().Unix())
+	return rand.Intn(60)
 }

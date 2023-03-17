@@ -2,6 +2,9 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
+	"strconv"
+	"time"
 	"took/chat/rpc/internal/svc"
 	"took/chat/rpc/types/chat"
 	"took/video/helper"
@@ -35,6 +38,11 @@ func (l *GetChatMessageLogic) GetChatMessage(in *chat.ChatMessageRequest) (*chat
 		return nil, err
 	}
 	resp.MessageList = messageList
+	s, err := json.Marshal(resp.MessageList)
+	if err != nil {
+		return nil, err
+	}
+	l.svcCtx.RDB.Set(l.ctx, "ChatMessage:"+strconv.FormatInt(uc.Id, 10)+"to"+strconv.FormatInt(in.ToUserId, 10), s, time.Second*time.Duration(3600*6))
 	resp.StatusMsg = ""
 	resp.StatusCode = 0
 	return resp, nil
