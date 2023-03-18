@@ -32,7 +32,7 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, error) {
-	has, _ := l.svcCtx.Engine.Exist(&model.User{
+	has, _ := l.svcCtx.UserModel.Exist(l.ctx, &model.User{
 		Username: in.Username,
 	})
 	if has {
@@ -70,8 +70,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 		Signature:       text.Content,
 	}
 
-	l.svcCtx.Engine.Cols("username", "password", "avatar", "background_image",
-		"signature").Insert(&usr)
+	l.svcCtx.UserModel.Insert(&usr)
 
 	return &user.RegisterResp{
 		StatusCode: 0,

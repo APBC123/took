@@ -25,12 +25,10 @@ func NewGetFollowListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 }
 
 func (l *GetFollowListLogic) GetFollowList(in *user.FollowListReq) (*user.FollowListResp, error) {
-	var followList []*user.User
-	l.svcCtx.Engine.Table("user").Join("LEFT", "follow", "user.id = follow.user_id").Select(
-		"user.*").Where("follow.fan_id = ?", in.ToUserId).Find(&followList)
+	followList := user.NewUserList(l.svcCtx.FollowModel.GetFollowById(l.ctx, in.ToUserId))
 
 	for i := range followList {
-		isFollow, _ := l.svcCtx.Engine.Exist(&model.Follow{
+		isFollow, _ := l.svcCtx.FollowModel.Exist(l.ctx, &model.Follow{
 			UserId: followList[i].Id,
 			FanId: in.UserId,
 		})

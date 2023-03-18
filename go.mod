@@ -13,12 +13,10 @@ require (
 	github.com/zeromicro/go-zero v1.5.0
 	google.golang.org/grpc v1.53.0
 	google.golang.org/protobuf v1.28.2-0.20220831092852-f930b1dc76e8
-	honnef.co/go/tools v0.0.1-2020.1.4
 	xorm.io/xorm v1.3.2
 )
 
 require (
-	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/aws/aws-sdk-go v1.38.20 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.0 // indirect
@@ -94,7 +92,6 @@ require (
 	golang.org/x/term v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
-	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230123190316-2c411cf9d197 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
