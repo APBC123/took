@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"errors"
 	"strconv"
 	"took/video/helper"
 	models2 "took/video/models"
@@ -33,7 +32,6 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 	}
 	resp := new(video.FavoriteActionResponse)
 	//点赞取消
-	l.svcCtx.RDB.Del(l.ctx, "FavoriteList_UserId:"+strconv.FormatInt(uc.Id, 10))
 	if in.ActionType == 2 {
 		session := l.svcCtx.Engine.NewSession()
 		defer session.Close()
@@ -49,7 +47,7 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 			return nil, err
 		}
 		vd := new(models2.Video)
-		_, err = l.svcCtx.Engine.Where("id = ?", in.VideoId).Get(vd)
+		_, err = l.svcCtx.Engine.Where("id = ? AND removed = ? AND deleted = ?", in.VideoId, false, false).Get(vd)
 		if err != nil {
 			return nil, err
 		}
@@ -81,31 +79,32 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 		}
 		_, err = l.svcCtx.Engine.Insert(favoriteRecord)
 		if err != nil {
-			return nil, errors.New("1")
+			return nil, err
 		}
 		_, err = l.svcCtx.Engine.Exec("update video set favorite_count = favorite_count+1 where id = ? and removed = ? and deleted = ?", in.VideoId, false, false)
 		if err != nil {
-			return nil, errors.New("2")
+			return nil, err
 		}
 		vd := new(models2.Video)
-		_, err = l.svcCtx.Engine.Where("id = ?", in.VideoId).Get(vd)
+		_, err = l.svcCtx.Engine.Where("id = ? AND removed = ? AND deleted = ?", in.VideoId, false, false).Get(vd)
 		if err != nil {
 			return nil, err
 		}
 		_, err = l.svcCtx.Engine.Exec("update user set favorite_count = favorite_count+1 where id = ? and enable = ? and deleted = ?", uc.Id, true, false)
 		if err != nil {
-			return nil, errors.New("3")
+			return nil, err
 		}
 		_, err = l.svcCtx.Engine.Exec("update user set total_favorited = total_favorited+1 where id = ? and enable = ? and deleted = ?", vd.AuthorId, true, false)
 		if err != nil {
-			return nil, errors.New("4")
+			return nil, err
 		}
 		if err = session.Commit(); err != nil {
 			return nil, err
 		}
-
 		resp.StatusMsg = "点赞成功"
 		resp.StatusCode = 0
 	}
+	//删除Redis中对应的缓存
+	l.svcCtx.RDB.Del(l.ctx, "FavoriteList_UserId:"+strconv.FormatInt(uc.Id, 10))
 	return resp, nil
 }
