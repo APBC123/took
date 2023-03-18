@@ -32,7 +32,7 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, error) {
-	has, _ := l.svcCtx.UserModel.Exist(&model.User{
+	has, _ := l.svcCtx.UserModel.Exist(l.ctx, &model.User{
 		Username: in.Username,
 	})
 	if has {

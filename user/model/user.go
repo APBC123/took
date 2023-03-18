@@ -1,8 +1,11 @@
 package model
 
 import (
-	"time"
+	"context"
+	"encoding/json"
 	"log"
+	"strconv"
+	"time"
 
 	"github.com/go-redis/redis/v8"
 	_ "github.com/go-sql-driver/mysql"
@@ -57,14 +60,66 @@ func (m *UserModel) Insert(usr *User) {
 		"signature").Insert(usr)
 }
 
-func (m *UserModel) Exist(usr *User) (bool, error) {
-	return m.db.Exist(usr)
+func (m *UserModel) Exist(ctx context.Context, usr *User) (bool, error) {
+	key := "user:name:"+usr.Username+":exist"
+	strHas, err := m.rdb.Get(ctx, key).Result()
+	if err == nil {
+		log.Printf("get key <- %s = %s\n", key, strHas)
+		return strconv.ParseBool(strHas)
+	}
+	has, _ := m.db.Exist(usr)
+	m.rdb.Set(ctx, key, has, 0)
+	log.Printf("set key -> %s = %v\n", key, has)
+	return has, nil
 }
 
-func (m *UserModel) Update(usr *User) {
+func (m *UserModel) Update(ctx context.Context, usr *User) {
 	m.db.ID(usr.Id).Update(*usr)
 }
 
-func (m *UserModel) Get(usr *User) (bool, error) {
-	return m.db.Get(usr)
+func (m *UserModel) GetById(ctx context.Context, usr *User) error {
+	key := "user:id:"+strconv.FormatInt(usr.Id, 10)
+	userStr, err := m.rdb.Get(ctx, key).Result()
+	if err == nil {
+		log.Printf("get key <- %s = %s\n", key, userStr)
+		err = json.Unmarshal([]byte(userStr), &usr)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	
+	_, err = m.db.ID(usr.Id).Get(usr)
+	if err != nil {
+		return err
+	}
+	userData, _ := json.Marshal(usr)
+	m.rdb.Set(ctx, key, userData, 0)
+	log.Printf("set key -> %s = %s\n", key, userData)
+	return nil
+}
+
+func (m *UserModel) GetByName(ctx context.Context, usr *User) (bool, error) {
+	key := "user:name:"+usr.Username
+	has, err := m.Exist(ctx, usr)
+	if err != nil || !has {
+		return has, err
+	}
+	userStr, err := m.rdb.Get(ctx, key).Result()
+	if err == nil {
+		log.Printf("get key <- %s = %s\n", key, userStr)
+		err = json.Unmarshal([]byte(userStr), &usr)
+		if err != nil {
+			return false, err
+		}
+		return true, nil
+	}
+	_, err = m.db.Where("username=?", usr.Username).Get(usr)
+	if err != nil {
+		return false, err
+	}
+	userData, _ := json.Marshal(usr)
+	m.rdb.Set(ctx, key, userData, 0)
+	log.Printf("set key -> %s = %s\n", key, userData)
+	return true, nil
 }

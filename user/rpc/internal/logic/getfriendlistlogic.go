@@ -26,10 +26,10 @@ func NewGetFriendListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 }
 
 func (l *GetFriendListLogic) GetFriendList(in *user.FriendListReq) (*user.FriendListResp, error) {
-	friendList := user.NewFriendList(l.svcCtx.FollowModel.FindFriendById(in.ToUserId))
+	friendList := user.NewFriendList(l.svcCtx.FollowModel.GetFriendById(l.ctx, in.ToUserId))
 	
 	for i := range friendList {
-		isFollow, _ := l.svcCtx.FollowModel.Exist(&model.Follow{
+		isFollow, _ := l.svcCtx.FollowModel.Exist(l.ctx, &model.Follow{
 			UserId: friendList[i].Id,
 			FanId: in.UserId,
 		})

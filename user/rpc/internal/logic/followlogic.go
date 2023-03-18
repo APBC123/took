@@ -32,7 +32,7 @@ func (l *FollowLogic) Follow(in *user.FollowReq) (*user.FollowResp, error) {
 		}, nil
 	}
 
-	isFollow, _ := l.svcCtx.FollowModel.Exist(&model.Follow{
+	isFollow, _ := l.svcCtx.FollowModel.Exist(l.ctx, &model.Follow{
 		FanId: in.UserId,
 		UserId: in.ToUserId,
 	})
@@ -50,8 +50,8 @@ func (l *FollowLogic) Follow(in *user.FollowReq) (*user.FollowResp, error) {
 
 	fromUser := model.User{Id: in.UserId}
 	toUser := model.User{Id: in.ToUserId}
-	l.svcCtx.UserModel.Get(&fromUser)
-	l.svcCtx.UserModel.Get(&toUser)
+	l.svcCtx.UserModel.GetById(l.ctx, &fromUser)
+	l.svcCtx.UserModel.GetById(l.ctx, &toUser)
 
 	resp := user.FollowResp{}
 	if in.ActionType == 1 {
@@ -71,7 +71,7 @@ func (l *FollowLogic) Follow(in *user.FollowReq) (*user.FollowResp, error) {
 		toUser.FollowerCount--
 		resp.StatusMsg = "取消关注成功"
 	}
-	l.svcCtx.UserModel.Update(&fromUser)
-	l.svcCtx.UserModel.Update(&toUser)
+	l.svcCtx.UserModel.Update(l.ctx, &fromUser)
+	l.svcCtx.UserModel.Update(l.ctx, &toUser)
 	return &resp, nil
 }
