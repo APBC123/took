@@ -104,6 +104,7 @@ func (l *PublishListLogic) PublishList(in *video.PublishListRequest) (*video.Pub
 			return nil, err
 		}
 		l.svcCtx.RDB.Set(l.ctx, "PublishList:"+strconv.FormatInt(in.UserId, 10), s, time.Second*time.Duration(define.CacheExpire+helper.Random()))
+		l.svcCtx.RDB.Set(l.ctx, "PublishListCount:"+strconv.FormatInt(in.UserId, 10), 0, time.Second*time.Duration(define.CacheExpire+helper.Random())) //设置计数
 
 		resp.StatusCode = 0
 		resp.StatusMsg = ""
@@ -112,6 +113,11 @@ func (l *PublishListLogic) PublishList(in *video.PublishListRequest) (*video.Pub
 		err = json.Unmarshal([]byte(list), &resp.VideoList)
 		if err != nil {
 			return nil, err
+		}
+		//计数加一并判断是否为热点数据
+		if times, _ := l.svcCtx.RDB.Incr(l.ctx, "PublishListCount:"+strconv.FormatInt(in.UserId, 10)).Uint64(); times > define.TimesOffset { //当1~2分钟内的访问量超过设定的阈值将设置数据永不过期
+			l.svcCtx.RDB.Expire(l.ctx, "PublishList:"+strconv.FormatInt(in.UserId, 10), -1)
+			l.svcCtx.RDB.Expire(l.ctx, "PublishListCount"+strconv.FormatInt(in.UserId, 10), -1)
 		}
 		resp.StatusMsg = ""
 		resp.StatusCode = 0

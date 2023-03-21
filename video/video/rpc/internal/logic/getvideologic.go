@@ -106,6 +106,7 @@ func (l *GetVideoLogic) GetVideo(in *video.FeedRequest) (*video.FeedResponse, er
 			return nil, err
 		}
 		l.svcCtx.RDB.Set(l.ctx, "LatestTime:"+strconv.FormatInt(in.LatestTime, 10), s, time.Second*time.Duration(define.CacheExpire+helper.Random()))
+		l.svcCtx.RDB.Set(l.ctx, "LatestTimeCount:"+strconv.FormatInt(in.LatestTime, 10), 0, time.Second*time.Duration(define.CacheExpire+helper.Random())) //设置计数
 		resp.StatusMsg = ""
 		resp.StatusCode = 0
 		resp.NextTime = in.LatestTime + int64(len(vdList))
@@ -114,6 +115,11 @@ func (l *GetVideoLogic) GetVideo(in *video.FeedRequest) (*video.FeedResponse, er
 		err = json.Unmarshal([]byte(list), &resp.VideoList)
 		if err != nil {
 			return nil, err
+		}
+		//计数加一并判断是否为热点数据
+		if times, _ := l.svcCtx.RDB.Incr(l.ctx, "LatestTimeCount:"+strconv.FormatInt(in.LatestTime, 10)).Uint64(); times > define.TimesOffset { //当1~2分钟内的访问量超过设定的阈值将设置记录永不过期
+			l.svcCtx.RDB.Expire(l.ctx, "LatestTime:"+strconv.FormatInt(in.LatestTime, 10), -1)
+			l.svcCtx.RDB.Expire(l.ctx, "LatestTimeCount"+strconv.FormatInt(in.LatestTime, 10), -1)
 		}
 		resp.StatusMsg = ""
 		resp.StatusCode = 0
