@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"strconv"
 	"time"
 	helper2 "took/video/helper"
 	models2 "took/video/models"
@@ -45,5 +46,6 @@ func (l *SendChatMessageLogic) SendChatMessage(in *chat.SendChatMessageRequest) 
 		resp.StatusMsg = "发送失败"
 		resp.StatusCode = 0
 	}
+	l.svcCtx.RDB.Unlink(l.ctx, "ChatMessage:"+strconv.FormatInt(uc.Id, 10)+"to"+strconv.FormatInt(in.ToUserId, 10))
 	return resp, nil
 }

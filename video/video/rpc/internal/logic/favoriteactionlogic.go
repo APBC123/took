@@ -105,6 +105,6 @@ func (l *FavoriteActionLogic) FavoriteAction(in *video.FavoriteActionRequest) (*
 		resp.StatusCode = 0
 	}
 	//删除Redis中对应的缓存
-	l.svcCtx.RDB.Del(l.ctx, "FavoriteList_UserId:"+strconv.FormatInt(uc.Id, 10))
+	l.svcCtx.RDB.Unlink(l.ctx, "FavoriteList_UserId:"+strconv.FormatInt(uc.Id, 10))
 	return resp, nil
 }
