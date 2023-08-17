@@ -57,10 +57,10 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 		body, _ := io.ReadAll(resp.Body)
 
 		json.Unmarshal(body, &text)
-		if len(text.Content) < 90 { 
-			break;
+		if len(text.Content) < 90 {
+			break
 		}
-		time.Sleep(30*time.Millisecond)
+		time.Sleep(30 * time.Millisecond)
 	}
 	usr := model.User{
 		Username:        in.Username,

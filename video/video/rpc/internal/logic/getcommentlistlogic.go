@@ -75,9 +75,9 @@ func (l *GetCommentListLogic) GetCommentList(in *video.CommentListRequest) (*vid
 		} else {
 			ur[i].IsFollow = false
 		}
-		ur[i].TotalFavorited, _ = l.svcCtx.Engine.Where("author_id = ? AND deleted = ? AND removed = ?", user.Id, false, false).SumInt(vd, "favorite_count") //获赞总数
-		ur[i].WorkCount, _ = l.svcCtx.Engine.Where("author_id = ? AND deleted = ? AND removed = ?", user.Id, false, false).Count(new(models2.Video))         //作品数
-		ur[i].FavoriteCount, _ = l.svcCtx.Engine.Where("user_id = ? AND deleted = ? AND removed = ?", user.Id, false, false).Count(new(models2.Favorite))    //喜欢数
+		ur[i].TotalFavorited, _ = l.svcCtx.Engine.Where("author_id = ? AND deleted = ? AND removed = ?", user.Id, false, false).SumInt(vd, "favorite_count")
+		ur[i].WorkCount, _ = l.svcCtx.Engine.Where("author_id = ? AND deleted = ? AND removed = ?", user.Id, false, false).Count(new(models2.Video))
+		ur[i].FavoriteCount, _ = l.svcCtx.Engine.Where("user_id = ? AND deleted = ? AND removed = ?", user.Id, false, false).Count(new(models2.Favorite))
 	}
 	//生成CommentList
 	ctList := make([]*video.Comment, len(ct))
