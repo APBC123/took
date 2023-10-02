@@ -69,6 +69,11 @@ func (l *CommentActionLogic) CommentAction(in *video.CommentActionRequest) (*vid
 
 		session := l.svcCtx.Engine.NewSession()
 		defer session.Close()
+		defer func() {
+			if err != nil {
+				session.Rollback()
+			}
+		}()
 		if err = session.Begin(); err != nil {
 			return nil, err
 		}
